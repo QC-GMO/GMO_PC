@@ -1,0 +1,76 @@
+<?php
+exit(var_dump($action));
+header('content-Type: text/html; charset=utf-8');
+include_once('../../web_include/init.php');
+
+$action = daddslashes($_GET['action']);
+
+switch ($action) {
+    //大麦城获取用户信息
+    case 'getuserinfo':
+        $token=daddslashes($_POST['Userid']);
+        //$token='cc6da704bd58fc12f1855aa47c98d22d';
+        $token_de=decrypt($web_config['Web_Blowfish'],$token);//解密token,Blowfish方式，gmo提供
+        //$uid  =  strtok ( $token ,  ':' );
+        $uid  =  strstr ( $token_de ,  ':' ,  true );
+        $user = $db->getone("select * from db_member where id='".$uid."' and status=2");
+        $data=array(
+            'Userid'=>$token,
+            'Username'=>$user['username'],
+            'Point'=>$user['integral'],//会员当前积分
+            'Mobile'=>$user['mobile'],
+            'Email'=>$user['email']
+            //'Address'=>''//建议在平台填写
+        );
+        exit( json_encode( $data ) );
+        break;
+    //平台购买商品，扣除积分
+    case 'deduct':
+        $token=daddslashes($_POST['Userid']);
+        $integral=$_POST['UsePoint'];
+        if(!is_numeric($integral) || $integral<1){
+            exit( json_encode( array('Status'=>101,'Msg'=>'UsePoint is not a number or Less than 1') ) );
+        }
+        $token_de=decrypt($web_config['Web_Blowfish'],$token);//解密token,Blowfish方式，gmo提供
+        $uid  =  strstr ( $token_de ,  ':' ,  true );
+        $user = $db->getone("select integral from db_member where id='".$uid."' and status=2");
+        if(empty($user)){exit( json_encode( array('Status'=>104,'Msg'=>'Did not check the user information') ) );}
+        if($integral>$user['integral']){
+            exit( json_encode( array('Status'=>102,'Msg'=>'Your balance is insufficient!') ) );
+        }
+        $sql="UPDATE `".$db_pre."member` SET `integral`=`integral`-'" .$integral. "' WHERE id='".$uid."'";
+        if($db->query($sql)){//扣除积分成功后插入积分变动表并返回信息给大麦城
+            $sql = "INSERT INTO `".$db_pre."integral`(`uid`,`type`,`val`,`source`,`add_time`)VALUES(
+					'".$uid."','2','".$integral."','兑换商品','".date('Y-m-d H:i:s')."')";
+            $db->query($sql);
+            exit( json_encode( array('Status'=>100,'Msg'=>'') ) );
+        }else{
+            exit( json_encode( array('Status'=>103,'Msg'=>mysql_error()) ) );
+        }
+        break;
+     //大麦城返回订单信息，生成订单
+    case 'order':
+        $token=daddslashes($_POST['Userid']);
+        $token_de=decrypt($web_config['Web_Blowfish'],$token);//解密token,Blowfish方式，gmo提供
+        $uid  =  strstr ( $token_de ,  ':' ,  true );
+        $user = $db->getone("select id from db_member where id='".$uid."' and status=2");
+        if(empty($user)){exit( json_encode( array('Status'=>101,'Msg'=>'Did not check the user information') ) );}
+        if(empty($_POST['number']) || empty($_POST['name']) || empty($_POST['mobile']) || empty($_POST['address']) || empty($_POST['title']) || empty($_POST['num'] || empty($_POST['total']))){
+            exit( json_encode( array('Status'=>102,'Msg'=>'Parameter is invalid') ) );
+        }
+        $sql = "INSERT INTO `".$db_pre."integral`(`type`,`uid`,`number`,`name`,`mobile`,`address`,`title`,`num`,`total`,`status`,`add_time`)VALUES(
+					'1','".$uid."','".$_POST['number']."','".$_POST['name']."','".$_POST['mobile']."','".$_POST['address']."','".$_POST['title']."','".$_POST['num']."','".$_POST['total']."','1','".date('Y-m-d H:i:s')."')";
+        if($db->query($sql)){//订单信息插入成功
+            exit( json_encode( array('Status'=>100,'Msg'=>'') ) );
+        }else{
+            exit( json_encode( array('Status'=>103,'Msg'=>mysql_error()) ) );
+        }
+        break;
+}
+
+
+
+
+
+
+
