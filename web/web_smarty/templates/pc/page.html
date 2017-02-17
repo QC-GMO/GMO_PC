@@ -1,0 +1,9 @@
+{if $page_count>1}
+<div class="pages">
+<a href="{if $page eq 1}#{else}{$url}page={$page-1}{/if}" class="prev{if $page eq 1} disable{/if}"><i>上一页</i></a>
+{foreach $page_array as $p_a}
+<a href="{$url}page={$p_a}" {if $page eq $p_a}class="hover"{/if}>{$p_a}</a>
+{/foreach}
+<a href="{if $page eq $page_count}#{else}{$url}page={$page+1}{/if}" class="next{if $page gt 1} disable{/if}"><i>下一页</i></a>
+</div>
+{/if}

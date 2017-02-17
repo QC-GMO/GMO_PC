@@ -1,0 +1,75 @@
+{include file="pc/heard.html"}
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box choose">
+				<div class="title">特别推荐</div>
+				<div class="content">
+					<div class="bd">
+						<ul>
+						{foreach $json_arr_cn as $k=>$v}
+							<li><a target="_blank" href="{$v.title}"><img src="{$web.Web_admin_url}/{$v.img}" width="885" height="93" /></a></li>
+						{/foreach}
+						</ul>
+					</div>
+					<div class="hd">
+					{foreach $json_arr_cn as $k=>$v}
+					<span></span>
+					{/foreach}
+					</div>
+					<a class="prev"></a><a class="next"></a>
+				</div>
+			</div>
+			<div class="box in_questionnaire">
+				<div class="title">问卷调查</div>
+				<div class="content">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<th width="33%">问卷名</th>
+							<th width="13%">问卷号</th>
+							<th width="13%">积分</th>
+							<th width="15%">发布时间</th>
+							<th width="14%">类别</th>
+							<th width="15%">操作</td>
+						</tr>
+						{foreach $wenjuan as $k=>$v}
+						<tr>
+							<td><img src="images/{if $v.optimize_device eq 1}mypage_icons_pc.jpg{elseif $v.optimize_device eq 2}mypage_icons_sp.jpg{else}mypage_icons_pcsp.jpg{/if}" width="17" height="19" /> {$v.title}</td>
+							<td align="center">{$v.research_id}</td>
+							<td align="center">{if $v.point_min neq $v.point}{$v.point_min}-{/if}{$v.point}</td>
+							<td align="center">{$v.arrivalDay}</td>
+							<td align="center"><img src="images/icon_{$v.logo_type}.png" width="24" height="24" /></td>
+							<td align="center">
+							{if $v.ans_stat_cd eq '02'}<a class="but01" style="background: #999999;">已回答</a>
+							{elseif $v.status eq '05' && $v.enqPerPanelStatus eq '05'}
+								<a href="{$v.redirectSt}{$v.id}={$v.encryptId}" class="but01 wenjuan" data-val="{$v.research_id}" target="_blank">去回答</a>
+							{else}<a class="but01" style="background: #999999;">已结束</a>{/if}
+							</td>
+						</tr>
+						{/foreach}
+					</table>
+					<!-- <a class="but02">查看更多</a> -->
+				</div>
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
+{literal}
+<script>
+//点击回答问卷记录日志
+$(".wenjuan").click(function(){
+	var research_id=$(this).data("val")
+	$.ajax({
+		url:'index.php?act=wenjuan',
+		type:"POST",
+		dataType:"json",
+		data:{research_id:research_id},
+		success: function(data){
+			
+		}
+	})
+})
+jQuery(".choose .content").slide({mainCell:".bd ul",effect:"leftLoop",autoPlay:true});
+</script>
+{/literal}

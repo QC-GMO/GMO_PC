@@ -1,0 +1,192 @@
+{include file="pc/heard.html"}
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+				<div class="title">常见问题答疑/咨询</div>
+				<div class="content">
+					<div class="faq_title">
+					{foreach $parent_menu_message3 as $k=>$v}
+					<a href="{$v.class_url}?cid={$v.class_id}"{if $cid eq $v.class_id} class="hover"{/if}><span>{$v.class_name_cn}</span></a>
+					{/foreach}
+					<!-- <a href="#" class="no_bg"><span>问卷问题</span></a> -->
+					</div>
+					<div class="faq_list">.
+						{foreach $issue as $k=>$v}
+						<div class="item">
+							<h3>{$v.title_cn}</h3>
+							<div class="text">{$v.content_cn}</div>
+						</div>
+						{/foreach}
+					</div>
+					<div class="faq_but"><a class="but" onclick="display(2);">问卷相关咨询</a> <a class="but" onclick="display(1);">其他一般咨询</a></div>
+				</div>
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
+<div class="pop">
+	<div class="pop_content">
+		<div class="close"><a><img src="images/close.png" width="21" height="21" /></a></div>
+		<h3><img src="images/member_img01.png" width="48" /> 会员咨询</h3>
+		<div class="tag"></div>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="21%" align="right">用户名：</td>
+				<td width="79%"><input type="text" id="name" maxlength="50" value="{$user.username}" onfocus="$('.tag').text('')" /></td>
+			</tr>
+			<tr>
+				<td align="right">邮箱：</td>
+				<td><input type="text" id='email' maxlength="50" value="{$user.email}" {if $user.email neq ''}readonly{/if} onfocus="$('.tag').text('')" /></td>
+			</tr>
+			
+			<tr>
+				<td align="right">平台：</td>
+				<td><div class="select01" id='sys'>
+						<b>请选择系统</b><i></i>
+						<ul>
+						<li>Windows 10</li>
+						<li>Windows 8</li>
+						<li>Windows 7</li>
+						<li>Windows Vista</li>
+						<li>Windows XP</li>
+						<li>其他的Windows OS</li>
+						<li>Mac OS X</li>
+						<li>Mac OS</li>
+						<li>IOS</li>
+						<li>Android</li>
+						<li>其他OS</li>
+						</ul>
+					</div>
+					<div class="select01" id='browser'>
+						<b>请选择浏览器</b><i></i>
+						<ul>
+						<li>Internet Explorer 11</li>
+						<li>Internet Explorer 10</li>
+						<li>Internet Explorer 9</li>
+						<li>Internet Explorer 8</li>
+						<li>其他的Internet Explorer</li>
+						<li>Google Chrome</li>
+						<li>Firefox</li>
+						<li>Safari</li>
+						<li>360浏览器</li>
+						<li>搜狗浏览器</li>
+						<li>猎豹浏览器</li>
+						<li>QQ浏览器</li>
+						<li>UC浏览器</li>
+						<li>hao123浏览器</li>
+						<li>其他浏览器</li>
+						<li>我也不知道</li>
+						</ul>
+					</div>
+					</td>
+			</tr>
+			<tr style="display:none" class="type2">
+				<td align="right">问卷名：</td>
+				<td><input type="text" id='subject' maxlength="250" onfocus="$('.tag').text('')" /></td>
+			</tr>
+			<tr style="display:none" class="type2">
+				<td align="right">问卷号：</td>
+				<td><input type="text" id='number' maxlength="50" onfocus="$('.tag').text('')" /></td>
+			</tr>
+			<tr>
+				<td align="right" valign="top">咨询内容：</td>
+				<td valign="top"><textarea id="message" maxlength="1000" onfocus="$('.tag').text('')"></textarea></td>
+			</tr>
+			<tr>
+				<td height="55" colspan="2" align="center" valign="bottom">
+				<a class="but01 zx1" onclick='message()'>立即咨询</a><a class="but01 zx2" style="display:none;">正在提交</a>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+{literal}
+<script>
+$(function(){
+	$('.close a').click(function() {
+		$('.pop').fadeOut()
+	});
+	//绑定咨询
+	//$('#zx').bind("click",message)
+})
+var _type=0;
+function display(type){
+	$('.pop').fadeIn()
+	if(type==2){//显示问卷字段
+		$('.type2').fadeIn()
+		$('.pop .pop_content').attr('style','height:660px;margin:-330px 0 0 -250px;')
+	}else{//隐藏问卷字段
+		$('.type2').attr('style','display:none')
+		$('.pop .pop_content').attr('style','height:625px;margin:-313px 0 0 -250px;')
+	}
+	_type=type
+}
+function message(){
+	var name=$('#name').val()
+	if(name==''){
+		$('.tag').text('请填写用户名');return false;
+		//$("#name").focus();
+	}
+	var email=$('#email').val()
+	var reg=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	if(email==''){
+		$('.tag').text('请填写邮箱');return;
+		//$("#email").focus();
+	}else{
+		if(!reg.test(email)){
+			$('.tag').text('邮箱格式错误');return;
+			//$("#email").focus();
+		}
+	}
+	var sys=$('#sys b').text()
+	if(sys=='请选择系统' || sys==''){
+		$('.tag').text('请选择您所使用的系统');return;
+	}
+	var browser=$('#browser b').text()
+	if(browser=='请选择浏览器' || browser==''){
+		$('.tag').text('请选择您所使用的浏览器');return;
+	}
+	var subject=$('#subject').val()
+	if(_type==2 && subject==''){
+		$('.tag').text('请填写问卷名');return;
+		//$("#subject").focus();
+	}
+	var number=$('#number').val()
+	if(_type==2 && number==''){
+		$('.tag').text('请填写问卷号');return;
+		//$("#number").focus();
+	}
+	var message=$('#message').val()
+	if(message==''){
+		$('.tag').text('请填写咨询内容');return false;
+		//$("#message").focus();
+	}
+	//解除绑定，改变按钮
+	//隐藏按钮
+	$('.zx1').attr('style','display: none;')
+	$('.zx2').attr('style','display: block;')
+	$('.zx2').attr('style','background: url(images/member_but01_c.png) no-repeat;')
+	$.ajax({
+		url:'?act=message',
+		type:"POST",
+		dataType:"json",
+		data:{_type:_type,name:name,email:email,subject:subject,number:number,message:message,sys:sys,browser:browser},
+		success: function(data){
+			if(data.code==1){
+				alert(data.msg)
+				$('.pop').fadeOut()
+				location.reload()
+			}else{
+				//显示按钮
+				$('.zx2').attr('style','display: none;')
+				$('.zx1').attr('style','display: block;')
+				$('.tag').text(data.msg)
+			}
+		}
+	})
+}
+
+</script>
+{/literal}

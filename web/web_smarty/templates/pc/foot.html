@@ -1,0 +1,16 @@
+<div class="bototm">
+	<div class="w1200">
+		<div class="fl">
+		{foreach $foot_array as $k=>$v}
+		{if $v.class_id eq 25}<a href="http://www.gmo-e-lab.com" target="_blank">
+		{else}
+		<a href="{$v.class_url}?cid={$v.class_id}">{/if}{$v.class_name_cn}</a> {if $k neq ($foot_array|array_keys)|max}|{/if}
+		{/foreach}　　<a href="http://www.miitbeian.gov.cn/" target="_blank">{$web.Web_ICP}</a>　　<span style="display:none;"><a href="http://www.dn.cn/" target="_blank">网站建设</a>：<a href="http://www.dn.cn/" target="_blank">求创科技</a></span>
+		   </div>
+		
+		<div class="fr" style="display:none;"><a href="#">手机版二维码<span><img src="images/code_01.gif" width="131" height="131" /><i></i></span></a> <a href="#">微信端二维码<span><img src="images/code_01.gif" width="131" height="131" /><i></i></span></a></div>
+	</div>
+</div>
+{include file="pc/yz_q.html"}
+</body>
+</html>

@@ -1,0 +1,193 @@
+{include file="pc/heard.html"}
+	<div class="main clearfix">
+		<div class="left fl">
+			<div class="banner">
+			{if $smarty.cookies.member_mobile neq ''}
+			<a href="{$flash.web1_url_cn}"><img src="{$web.Web_admin_url}/{$flash.img1_url_cn}" width="885" height="161" /></a>{else}
+			<a href="{$flash.web_url_cn}"><img src="{$web.Web_admin_url}/{$flash.img_url_cn}" width="885" height="383" /></a>{/if}</div>
+		{if $smarty.cookies.member_mobile neq ''}
+		<!-- 登录后问卷start -->
+			<div class="box in_questionnaire">
+				<div class="title">问卷调查</div>
+				<div class="content">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<th width="33%">问卷名</th>
+							<th width="13%">问卷号</th>
+							<th width="13%">积分</th>
+							<th width="15%">发布时间</th>
+							<th width="14%">类别</th>
+							<th width="15%">操作</td>
+						</tr>
+						{foreach $wenjuan as $k=>$v}
+						{if $k lt 5}
+						<tr>
+							<td><img src="images/{if $v.optimize_device eq 1}mypage_icons_pc.jpg{elseif $v.optimize_device eq 2}mypage_icons_sp.jpg{else}mypage_icons_pcsp.jpg{/if}" width="17" height="19" /> {$v.title}</td>
+							<td align="center">{$v.research_id}</td>
+							<td align="center">{if $v.point_min neq $v.point}{$v.point_min}-{/if}{$v.point}</td>
+							<td align="center">{$v.arrivalDay}</td>
+							<td align="center"><img src="images/icon_{$v.logo_type}.png" width="24" height="24" /></td>
+							<td align="center">
+							{if $v.ans_stat_cd eq '02'}<a class="but01" style="background: #999999;">已回答</a>
+							{elseif $v.status eq '05' && $v.enqPerPanelStatus eq '05'}
+								<a href="{$v.redirectSt}{$v.id}={$v.encryptId}" class="but01 wenjuan" data-val="{$v.research_id}" target="_blank">去回答</a>
+							{else}<a class="but01" style="background: #999999;">已结束</a>{/if}
+							</td>
+						</tr>
+						{/if}
+						{/foreach}
+					</table>
+					{if $wenjuan|count gt 0}
+					<a href="questionnaire.php" class="but02">查看更多</a>
+					{/if}
+				</div>
+			</div>
+		<!-- 登录后问卷end -->
+		{/if}
+			<div class="box in_recommend" style="display:none;">
+				<div class="title">最新推荐</div>
+				<div class="content"><a href="{$tuijian.web_url_cn}"><img src="{$web.Web_admin_url}/{$tuijian.img_url_cn}" width="883" height="187" /></a></div>
+			</div>
+			<div class="box in_event">
+				<div class="title">特别活动</div>
+				<div class="content clearfix">
+					<ul>
+					{foreach $tebie as $k=>$v}
+						<li>
+							<h3><a href="jsz.php">可口可乐优惠不停享</a></h3>
+							<div class="img"><a href="jsz.php"><img src="images/event_img01.jpg" width="174" height="174" /></a><a href="jsz.php" class="but">查看活动</a>
+							</div>
+						</li>
+					{/foreach}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="right fr">
+			<div class="box2 in_login">
+				<div class="title">会员登录</div>
+				<div class="content">
+				{if $smarty.cookies.member_mobile neq ''}
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td width="24%" align="right">用户名：</td>
+							<td width="76%">{$user.username}</td>
+						</tr>
+						<tr>
+							<td align="right">积分：</td>
+							<td class="integral">{$user.integral}</td>
+						</tr>
+					</table>
+					<a href="integral.php" class="login_but">立即兑换</a>
+					<div class="item2"><a data-val="20" href="user.php?cid=20" class="fl yz_q">修改个人信息</a><a href="user.php" class="fr">积分历史记录</a></div>
+					{else}
+						<div class="item"><!-- <label>手机号</label> --><input name="mobile" id="mobile" type="text" maxlength="11" placeholder="手机号" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /></div>
+						<div class="item"><!-- <label>密码</label> --><input name="password" id="password" type="password" maxlength="20" placeholder="密码" /></div>
+						<a class="login_but" onclick="check_form();">登录</a>
+					<div class="item2"><a href="register.php" class="fl">注册账号</a><a href="forget.php" class="fr">忘记密码？</a></div>
+					<div class="quick">
+						<h3><span>其他方式登录</span></h3>
+						<a href="jsz.php" class="icon01"></a>
+						<a href="jsz.php" class="icon02"></a>
+						<a href="jsz.php" class="icon03"></a>
+					</div>
+					{/if}
+				</div>
+			</div>
+			<div class="box2 in_news">
+				<div class="title">最新动态</div>
+				<div class="content" sty="height:205px;">
+					<div class="bd">
+						<ul>
+						{foreach $dongtai as $k=>$v}
+							{if $v.type eq 1}
+							<li>{$v.username}兑换了{$v.item_list}件商品</li>
+							{else}
+							<li>{$v.username}获得{$v.val}积分</li>
+							{/if}
+						{/foreach}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="box2 in_news">
+				<div class="title">通知信息</div>
+				<div class="content">
+					<ul>
+					{foreach $news as $k=>$v}
+						<li><a href="about.php?cid={$v.class_id}&tid={$v.id}">{$v.title_cn}</a><span>{$v.add_time|date_format:"%Y-%m-%d"}</span></li>
+					{/foreach}
+					</ul>
+				</div>
+			</div>
+			<div class="adv_01"><a href="about.php?cid=26"><img src="images/adv_icon01.jpg" width="268" height="85" /></a></div>
+			<div class="adv_01"><a href="about.php?cid=35"><img src="images/adv_icon02.jpg" width="268" height="85" /></a></div>
+			<div class="adv_01"><a href="issue.php"><img src="images/adv_icon03.jpg" width="268" height="86" /></a></div>
+		</div>
+	</div>
+</div>
+{include file="pc/foot.html"}
+{literal}
+<script>
+//登录表单
+function check_form(){
+	var mobile=$('#mobile').val();
+	if($("#mobile").val()==''){
+		alert("手机号码不能为空");
+		$("#mobile").focus();
+		return false;
+	}
+	var password=$('#password').val();
+	if($("#password").val()==''){
+		alert("密码不能为空");
+		$("#password").focus();
+		return false;
+	}
+	$.ajax({
+		url:'login.php?act=login',
+		type:"POST",
+		dataType:"json",
+		data: {mobile:mobile,password:password},
+		success: function(data){
+			if(data.code==2){
+				location.href='info.php';
+			}else if(data.code==1){
+				location.href='index.php';
+			}else{
+				alert(data.msg)
+			}
+		}
+	})
+	//$("#login_form").submit();
+}
+//密码焦点时回车事件,上抬键盘
+$("#password").keyup(function(event){
+	if(event.keyCode ==13){
+		  check_form();
+	  }
+})
+//点击回答问卷记录日志
+$(".wenjuan").click(function(){
+	var research_id=$(this).data("val")
+	$.ajax({
+		url:'?act=wenjuan',
+		type:"POST",
+		dataType:"json",
+		data:{research_id:research_id},
+		success: function(data){
+			
+		}
+	})
+})
+jQuery(".in_news .content").slide({mainCell:".bd ul",autoPlay:true,effect:"topMarquee",vis:5,interTime:30,trigger:"click"});
+$(function(){
+	$('.in_login .item input').keyup(function(){
+		if($(this).val()==''){
+			$(this).siblings('label').show()
+		}else{
+			$(this).siblings('label').hide()
+		}
+	})
+})
+</script>
+{/literal}

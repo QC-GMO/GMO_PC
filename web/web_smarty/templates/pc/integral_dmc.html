@@ -1,0 +1,70 @@
+{include file="pc/heard.html"}
+<script src="js/jquery.md5.js"></script>
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+				<div class="title">积分兑换</div>
+				<div class="content">
+					<div class="faq_title">
+					<input type="hidden" id="name" value="{$user.name}" />
+					<input type="hidden" id="address" value="{$user.province}{$user.city}{$user.address}" />
+					<input type="hidden" id="mobile" value="{$smarty.cookies.member_mobile}" />
+					{foreach $parent_menu_message3 as $k=>$v}
+					<a class="yz_q{if $cid eq $v.class_id} hover{/if}" data-val="{$v.class_id}" href="{$v.class_url}?cid={$v.class_id}"><span>{$v.class_name_cn}</span></a>
+					{/foreach}
+					</div>
+					<div class="exchange"><h3>兑换规则</h3>
+						<p><span class="color_c62522">● </span>会员自行确认账户内的积分，并申请想要的商品（商品所需积分不得超过会员持有的积分）。<br>&nbsp;&nbsp;&nbsp;申请成功后可在本网站查询相应进程。<br>&nbsp;&nbsp;&nbsp;在大麦城兑换物品后的配送费由大麦城承担，会员无需承担费用。</p>
+						<p><span class="color_c62522">● </span>该服务由本公司合作伙伴大麦城协助提供，涉及商品、配送等服务，若有问题请直接咨询所属客服，电话：4006871621，若产生<br>&nbsp;&nbsp;&nbsp;任何责任将一律由大麦城承担。</p>
+					</div>
+					
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="member_table2 exchange_table">
+						<tr>
+							<td height="90" colspan="3" align="center" valign="middle"><a id="dmc" class="but01" href="http://www.damaicheng.com/index.php?r=gmo/default&token={$user.token}" target="_blank">立即访问</a></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
+<input type="hidden" id='ps' value="{$user.password}" />
+<!-- {include file="pc/yz.html"} -->
+{literal}
+<script>
+$(function(){
+	var prior=$('#prior').val()
+	if(prior==''){
+		$('.pop2').fadeIn()
+		$('.close a').click(function(){
+			window.history.back();
+		})
+	}
+})
+
+$("#fen").change(function(){
+	  var fen=$('#fen').val()
+	  $('#qian').val(fen/100)
+	  
+});
+//访问大麦城之前验证地址
+$('#dmc').click(function(){
+	var name=$('#name').val();
+	var address=$('#address').val();
+	var mobile=$('#mobile').val();
+	if(name==''){
+		alert('需先填写真实姓名')
+		location.href='user.php?cid=20';
+		return false;
+	}else{
+		if(confirm('『是否使用\r收货人：'+name+'\r手机：'+mobile+'\r收货地址：'+address+'\r在商品兑换网站中进行积分兑换？信息如有误，请到注册信息修改画面进行修改。』')){
+			return true;
+		} else {
+			return false;
+		}		
+	}
+})
+</script>
+{/literal}

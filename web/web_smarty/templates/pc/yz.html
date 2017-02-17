@@ -1,0 +1,120 @@
+<div class="pop2" >
+	<div class="pop_content" style="lefT:45%;">
+		<div class="tag"></div>
+		<div class="close"><a onclick="window.history.back();"><img src="images/close.png" width="21" height="21" /></a></div>
+		<h3><img src="images/member_img01.png" width="48" /> 身份验证</h3>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="21%" align="right">出生年月：</td>
+				<td>
+					<div class="select01" id="year_y">
+						<b>年</b><i></i>
+						<ul>
+						</ul>
+					</div>
+					<div class="select01" id='month_y'>
+						<b>月</b><i></i>
+						<ul>
+						</ul>
+					</div>
+					<div class="select01" id='day_y'>
+						<b>日</b><i></i>
+						<ul>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">密码：</td>
+				<td><input type="password" id="password1" maxlength="20" onfocus="$('.tag').text('')" /></td>
+			</tr>
+			<tr>
+				<td height="65" colspan="2" align="center" valign="bottom"><a class="but01" onclick="yz();">立即验证</a></td>
+			</tr>
+		</table>
+	</div>
+</div>
+{literal}
+<script>
+function yz(){
+	var is_ok=true;
+	var y=$('#year_y b').text()
+	if(y=='' || y=='年'){
+		$('.tag').text('请选择年份');return;
+	}else if(y!=$('#year b').text()){
+		is_ok=false;
+	}
+	var m=$('#month_y b').text()
+	if(m=='' || m=='月'){
+		$('.tag').text('请选择月份');return;
+	}else if(m!=Number($('#month b').text())){
+		is_ok=false;
+	}
+	var d=$('#day_y b').text()
+	if(d=='' || d=='日'){
+		$('.tag').text('请选择日');return;
+	}else if(d!=Number($('#day b').text())){
+		is_ok=false;
+	}
+	var password=$('#password1').val()
+	if($.md5(password)!=$('#ps').val()){
+		is_ok=false;
+	}
+	//console.log($.md5(password));
+	//验证通过
+	if(!is_ok){
+		$('.tag').text('验证失败');return;
+	}else{
+		$('.pop2').fadeOut()
+	}
+	
+}
+//设置验证生日年份
+var year_y=new Date().getFullYear()
+var stryear = '';
+for( var i = year_y-15; i > year_y-100; i-- ){
+	stryear+='<li>'+i+'</li>'
+}
+$( '#year_y ul' ).html( stryear );
+//设置月份
+var strmonth = '';
+for( var i = 12; i > 0; i-- ){
+	strmonth+='<li>'+i+'</li>'
+}
+$( '#month_y ul' ).html( strmonth );
+//获取年份
+$("#year_y li").click(function(){
+	var y=$(this).text()
+	$('#year_y b').val(y)
+})
+//获取月份
+$("#month_y li").click(function(){
+	  var m=$(this).text()
+	  $('#month_y b').val(m)
+	  var y=$('#year_y b').val()
+	  //判断当前月份天数
+	  if(m=='1'||m=='3'||m=='5'||m=='7'||m=='8'||m=='10'||m=='12'){
+		  var i=31;
+	  }else if(m=='2'){
+		  if((y%4==0 && y%100!=0) || y%400==0){  
+			  var i=29;
+          }  
+          else{  
+        	  var i=28;
+          } 
+	  }else{
+		  var i=30;
+	  }
+	  var strday = '';
+	  for( i; i > 0; i-- ){
+	  	strday+='<li>'+i+'</li>'
+	  }
+	  $( '#day_y ul' ).html( strday );
+	//获取日
+	  $("#day_y li").click(function(){
+	  	var d=$(this).text()
+	  	  $('#day_y b').text(d)
+	  })
+})
+</script>
+{/literal}

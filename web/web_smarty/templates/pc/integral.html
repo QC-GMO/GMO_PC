@@ -1,0 +1,202 @@
+{include file="pc/heard.html"}
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+				<div class="title">{$menu_info.class_name_cn}<a href="about.php?cid=35">交换规则</a></div>
+				<div class="content">
+					<div class="faq_title">
+					<input type="hidden" id="crypt" value="{$crypt}" />
+					{foreach $parent_menu_message3 as $k=>$v}
+					{if $k eq 1}
+					<a class='confirm' href="http://www.test.damaicheng.com/test/index.php?r=gmo/default&token={$crypt}"><span>{$v.class_name_cn}</span></a>
+					{else}
+					<a href="{$v.class_url}?cid={$v.class_id}"{if $cid eq $v.class_id} class="hover"{/if}><span>{$v.class_name_cn}</span></a>
+					{/if}
+					{/foreach}
+					<!-- <a href="#" class="no_bg hover"><span>兑换流量</span></a> -->
+					
+						<div class="search"><span>积分范围选择</span>
+						<form id="search" action="" method="get">
+							<div class="select01">
+							<input type="hidden" id="area" name="area" value="" />
+								<b>全部</b><i></i>
+								<ul>
+									<li data-val="">全部</li>
+									<li data-val="5">5000以上</li>
+									<li data-val="4">1000~5000</li>
+									<li data-val="3">500~999</li>
+									<li data-val="2">100~499</li>
+									<li data-val="1">1~99</li>
+								</ul>
+							</div>
+							<!-- <input type="text" size="5" name="start" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} />
+							 - <input type="text" size="5" name="end" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /> -->
+							 <a onclick="sear()">搜索</a>
+							</form>
+						</div>
+					</div>
+					<div class="shop_list clearfix">
+						<ul>
+						{foreach $product as $k=>$v}
+							<li><img src="{$web.Web_admin_url}/{$v.img_url_cn}" width="174" height="174" /><h3>{$v.title_cn}</h3><span>{$v.price}</span> 积分<a class="but01" data-val="{$v.id}">兑换</a></li>
+						{/foreach}
+						</ul>
+					</div>
+					{include file="pc/page.html"}
+				</div>
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
+<div class="pop2">
+	<div class="pop_content">
+		<div class="close"><a><img src="images/close.png" width="21" height="21" /></a></div>
+		<h3><img src="images/member_img01.png" width="48" /> 身份验证</h3>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="105" align="right">出生年月：</td>
+				<td>
+					<div class="select01" id="year">
+						<b>年</b><i></i>
+						<ul>
+						</ul>
+					</div>
+					<div class="select01" id='month'>
+						<b>月</b><i></i>
+						<ul>
+						</ul>
+					</div>
+					<div class="select01" id='day'>
+						<b>日</b><i></i>
+						<ul>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">密码：</td>
+				<td><input type="text" /></td>
+			</tr>
+			<tr>
+				<td align="right">充值号码：</td>
+				<td><input type="text" /></td>
+			</tr>
+			<tr>
+				<td height="65" colspan="2" align="center" valign="bottom"><a class="but01" onclick="duihuan();">立即兑换</a></td>
+			</tr>
+		</table>
+	</div>
+	<div class="pop_content pop_content1">
+		<div class="close"><a><img src="images/close.png" width="21" height="21" /></a></div>
+		<h3><img src="images/member_img01.png" width="100" /><br />兑换成功</h3>
+	</div>
+</div>
+{literal}
+<script>
+//兑换
+var pid;
+function duihuan(){
+	
+}
+//获取范围区间
+$("#search li").click(function(){
+	var area=$(this).data('val')
+	  $('#area').val(area)
+})
+//搜索积分范围
+function sear(){
+	$("#search").submit();
+}
+//兑换流量城验证登录
+$('.shop_list a.but01').click(function(){
+	var crypt=$('#crypt').val()
+	if(crypt!=''){
+		pid=$(this).data('val')
+		$('.pop2').fadeIn()
+	}else{
+		alert('请登录')
+		return false;
+	}
+	
+});
+//跳转大麦城验证登录
+$('.confirm').click(function(){
+	var crypt=$('#crypt').val()
+	if(crypt==''){
+		alert('请登录')
+		return false;
+	}
+});
+
+//设置生日年份
+var year=new Date().getFullYear()
+var stryear = '';
+for( var i = year; i > 1919; i-- ){
+	stryear+='<li>'+i+'</li>'
+}
+$( '#year ul' ).html( stryear );
+//设置月份
+var strmonth = '';
+for( var i = 12; i > 0; i-- ){
+	strmonth+='<li>'+i+'</li>'
+}
+$( '#month ul' ).html( strmonth );
+//获取年份
+$("#year li").click(function(){
+	var y=$(this).text()
+	$('#year b').val(y)
+})
+//获取月份
+$("#month li").click(function(){
+	  var m=$(this).text()
+	  $('#month b').val(m)
+	  var y=$('#year b').val()
+	  //判断当前月份天数
+	  if(m=='1'||m=='3'||m=='5'||m=='7'||m=='8'||m=='10'||m=='12'){
+		  var i=31;
+	  }else if(m=='2'){
+		  if((y%4==0 && y%100!=0) || y%400==0){  
+			  var i=29;
+          }  
+          else{  
+        	  var i=28;
+          } 
+	  }else{
+		  var i=30;
+	  }
+	  var strday = '';
+	  for( i; i > 0; i-- ){
+	  	strday+='<li>'+i+'</li>'
+	  }
+	  $( '#day ul' ).html( strday );
+	//获取日
+	  $("#day li").click(function(){
+	  	var d=$(this).text()
+	  	  $('#day b').text(d)
+	  })
+})
+
+$(function(){
+	$('.close a').click(function() {
+		$('.pop2').fadeOut()
+	});
+	$('.pop_content .but01').click(function(){
+		//$(this).parents('.pop_content').fadeOut().siblings('.pop_content1').fadeIn()
+	})
+	$('.select01').click(function() {
+		$(this).find('ul').slideToggle()
+		$(this).siblings('.select01').find('ul').slideUp()
+		return false
+	});
+	$('.select01 li').click(function() {
+	    var text1 = $(this).text();
+	    var id = $(this).data("id");
+	    $(this).parent('ul').slideUp().siblings('b').text(text1)
+	    $(this).parent('ul').slideUp().siblings('b').attr("data-id", id)
+		return false
+	});
+})
+</script>
+{/literal}

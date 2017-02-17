@@ -1,0 +1,241 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="icon" type="image/x-icon" href="zcom.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{$menu_info1.class_keywords_cn}" />
+<meta name="description" content="{$menu_info1.class_description_cn}"/> 
+<title>{$menu_info.class_name_cn} | {$menu_info1.class_title_cn}</title>
+<link href="css/login.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.SuperSlide.2.1.js"></script>
+</head>
+
+<body>
+<div class="box info_box">
+	<div class="title">完善个人信息</div>
+	<div class="content">
+	<div class="tag"></div>
+		<div class="item"><label>用户名</label><input id="username" name="username" type="text" maxlength="10" onfocus="$('.tag').text('')" /><span class="icon03"></span></div>
+		<div class="item item7" style="z-index:99;"><label>出生年月</label><span class="icon04"></span>
+			<div class="select01">
+				<b>年</b><i></i>
+				<input type="hidden" id='Y' />
+				<ul id='year'>
+				</ul>
+			</div>
+			<div class="select01">
+				<b>月</b><i></i>
+				<input type="hidden" id='M' />
+				<ul id='month'>
+				</ul>
+			</div>
+			<div class="select01">
+				<b>日</b><i></i>
+				<input type="hidden" id='D' />
+				<ul id='day'>
+				</ul>
+			</div>
+		</div>
+		<p>请输入真实出生年月日，后期无法修改请谨慎填写</p>
+		<div class="item item6"><label>性别</label><span class="icon05"></span><b class="radio" data-val='1'>男</b><b class="radio" data-val='2'>女</b></div>
+		<p>请输入真实性别，后期无法修改请谨慎填写</p>
+		<div class="item"><label>姓名</label><input id="name" name="name" type="text" maxlength="10" onfocus="$('.tag').text('')" /><span class="icon03"></span></div>
+		<p>请输入真实姓名，非必填</p>
+		<div class="item item8"><label>地址</label><span class="icon06"></span>
+			<div class="select01">
+				<select id="province_id" name="province_id">
+				<option>请选择省</option>
+				{foreach $province as $v}
+				<option value="{$v.province}" data-val="{$v.id}">{$v.province}</option>
+				{/foreach}
+				</select>
+				<b id="province">请选择省</b><i></i>
+				<ul id='P'>
+				</ul>
+			</div>
+			<div class="select01">
+				<select id="city_id" name="city_id">
+				</select>
+				<b id="city">请选择市</b><i></i>
+				<ul id="C">
+				</ul>
+			</div>
+		</div>
+		<div class="item item5"><label>详细地址</label><input id="address" name="address" type="text" maxlength="200" onfocus="$('.tag').text('')" /></div>
+		<div class="item"><label>E-mailaddress</label><input id="email" name="email" type="text" maxlength="100" onfocus="$('.tag').text('')" /><span class="icon07"></span></div>
+		<a class="login_but" onclick='up_form()'>完成注册</a>
+	</div>
+</div>
+{literal}
+<script>
+$(function(){
+//设置生日年份
+var year=new Date().getFullYear()
+var stryear = '';
+for( var i = year-15; i > year-100; i-- ){
+	stryear+='<li>'+i+'</li>'
+}
+$( '#year' ).html( stryear );
+
+var strmonth = '';
+for( var i = 12; i > 0; i-- ){
+	strmonth+='<li>'+i+'</li>'
+}
+$( '#month' ).html( strmonth );
+
+//获取年份
+$("#year li").click(function(){
+	var y=$(this).text()
+	$('#Y').val(y)
+})
+//获取月份
+$("#month li").click(function(){
+	  var m=$(this).text()
+	  $('#M').val(m)
+	  var y=$('#Y').val()
+	  //判断当前月份天数
+	  if(m=='1'||m=='3'||m=='5'||m=='7'||m=='8'||m=='10'||m=='12'){
+		  var i=31;
+	  }else if(m=='2'){
+		  if((y%4==0 && y%100!=0) || y%400==0){  
+			  var i=29;
+          }  
+          else{  
+        	  var i=28;
+          } 
+	  }else{
+		  var i=30;
+	  }
+	  var strday = '';
+	  for( i; i > 0; i-- ){
+	  	strday+='<li>'+i+'</li>'
+	  }
+	  $( '#day' ).html( strday );
+	//获取日
+	  $("#day li").click(function(){
+	  	var d=$(this).text()
+	  	  $('#D').val(d)
+	  	  $('#D').prev().prev().text(d);
+	  })
+})
+//省市联动
+	//init("province_id","city_id");
+
+})
+
+function up_form(){
+	var username=$('#username').val()
+	if(username==''){
+		$('.tag').text('请填写用户名');return;
+	}else if(username.length<2){
+		$('.tag').text('用户名不能少于2个字符');return;
+	}
+	var Y=$('#Y').val()
+	var M=$('#M').val()
+	var D=$('#D').val()
+	if(Y=='' || M=='' || D==''){
+		$('.tag').text('请选择生日');return;
+	}
+	var sex=$('.radio.hover').data("val")
+	if(sex==undefined){
+		$('.tag').text('请选择性别');return;
+	}
+	var name=$('#name').val()
+	/* if(name==''){
+		$('.tag').text('请填写姓名');return;
+	} */
+	var province_id=$('#province_id').find("option:selected").data("val")
+	var city_id=$('#city_id').find("option:selected").data("val")
+	var province=$('#province').text()
+	var city=$('#city').text()
+	if(province_id==undefined || city_id==undefined || province=='请选择省' || city=='请选择市'){
+		$('.tag').text('请选择省市');return;
+	}
+	var address=$('#address').val()
+	if(address==''){
+		$('.tag').text('请填写详细地址');return;
+	}
+	var email=$('#email').val()
+	var reg=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	if(email==''){
+		$('.tag').text('请填写邮箱');return;
+	}else{
+		if(!reg.test(email)){
+			$('.tag').text('邮箱格式错误');return;
+		}
+	}
+	//隐藏按钮
+	$('.login_but').fadeOut()
+	$.ajax({
+		url:'?act=perfect',
+		type:"POST",
+		dataType:"json",
+		data: {username:username,Y:Y,M:M,D:D,sex:sex,name:name,province_id:province_id,city_id:city_id,province:province,city:city,address:address,email:email},
+		success: function(data){
+			alert(data.msg)
+			if(data.code==1){
+				location.href='index.php';
+			}else{
+				//显示按钮
+				$('.login_but').fadeIn()
+			}
+		}
+	})
+}
+$('.select01 option').click(function(){
+	alert(1)
+	alert($(this).data('val'))
+})
+
+$(function(){
+	$('.box .item input').keyup(function(){
+		if($(this).val()==''){
+			$(this).siblings('label').show()
+		}else{
+			$(this).siblings('label').hide()
+		}
+	})
+	$('.box .radio').click(function(){
+		$('.tag').text('')
+		$(this).addClass('hover').siblings('.radio').removeClass('hover')
+	})
+	$('.select01').click(function() {
+		$('.tag').text('')
+		$(this).find('ul').slideToggle()
+		$(this).siblings('.select01').find('ul').slideUp()
+		return false
+	});
+	$('.select01 select').change(function(){
+		var v_text=$(this).val()
+		$(this).siblings('b').text(v_text)
+	})
+	$('#province_id').change(function(){
+		//获取城市列表
+		var p_id=$(this).find("option:selected").data("val")
+		if(p_id == undefined){
+			$("#city").html('<option value="请选择市">请选择市</option>');
+		}else{
+			$.get("?act=getcity",{p_id:p_id},function(data){
+				if(data!=""){
+					$("#city_id").html('<option value="请选择市" data-val="0">请选择市</option>');
+					$.each(data,function(index,row){
+						$("#city_id").append('<option value="'+row['city']+'" data-val="'+row['gmo_cd']+'">'+row['city']+'</option>');
+					})
+				}
+			},"json")
+		}
+	})
+	$('.select01 li').click(function() {
+	    var text1 = $(this).text();
+	    var id = $(this).data("id");
+	    $(this).parent('ul').slideUp().siblings('b').text(text1)
+	    $(this).parent('ul').slideUp().siblings('b').attr("data-id", id)
+		return false
+	});
+})
+
+</script>
+{/literal}
+</body>
+</html>

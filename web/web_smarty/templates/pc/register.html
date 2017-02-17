@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="icon" type="image/x-icon" href="zcom.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{$menu_info1.class_keywords_cn}" />
+<meta name="description" content="{$menu_info1.class_description_cn}"/> 
+<title>{$menu_info.class_name_cn} | {$menu_info1.class_title_cn}</title>
+<link href="css/login.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.SuperSlide.2.1.js"></script>
+</head>
+
+<body>
+<div class="box">
+	<div class="title">会员注册<a class="close" href='index.php'><img src="images/close.png"></a></div>
+	<div class="content">
+		<div class="tag"></div>
+		<div class="item"><label>手机号</label><input id="mobile" name="mobile" type="text" maxlength="11" onfocus="$('.tag').text('')" {literal} onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /><span class="icon01"></span></div>
+		<div class="item item4"><label>验证码</label><input id="code" type="text" class="input01" maxlength="6" onfocus="$('.tag').text('')" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /><span class="icon02"></span><a id="sms" class="getcode">获取验证码</a></div>
+		<div class="item"><label>密码：8-20位,由字母,数字和符号中至少两种组合</label><input name="password" type="password" maxlength="20" style="ime-mode:disabled;" onfocus="$('.tag').text('')" /><span class="icon02"></span></div>
+		<div class="item"><label>确认密码</label><input name="repassword" type="password" maxlength="20" style="ime-mode:disabled;" onfocus="$('.tag').text('')" /><span class="icon02"></span></div>
+		<div class="item3"><!-- <input id="agree" name="" type="checkbox" />  -->请单击并阅读<a href="about.php?cid=31" id="tiaokuan" class="color_d62825" target="_blank">《会员条款》</a></div>
+		<a style="background:url(images/login_but02.jpg);" class="login_but">立即注册</a>
+		<div class="item2">已有账号？<a href="login.php" class="color_d62825">立即登录</a></div>
+	</div>
+</div>
+{literal}
+<script>
+$(function(){
+	$('.login_but').bind("click",tiaokuan)
+	$('#tiaokuan').click(function(){
+		//$('#agree').attr('checked','checked')
+		$('.login_but').attr('style','background:url(images/login_but01.gif)')
+		$('.login_but').bind("click",add_form)
+	})
+})
+function tiaokuan(){
+	$('.tag').text('必须点击阅读会员条款');return;
+}
+$(function(){
+	$('.box .item input').keyup(function(){
+		if($(this).val()==''){
+			$(this).siblings('label').show()
+		}else{
+			$(this).siblings('label').hide()
+		}
+	})
+})
+function countDownNum(options){
+		    var obj = {
+		        beforeText:'',//默认倒计时前面文字
+		        text:'S',//默认倒计时后面文字
+		        num:120,//默认倒计时120秒
+		        ele:'#sms'//默认倒计时元素
+		    };
+		    for(var i in options){
+		        obj[i] = options[i];
+		    }
+		    window.countTimer = null;
+		    clearInterval(window.countTimer);
+		    if(!Number(obj.num)){
+		        console.error('请传入合法数字');
+		        return false;
+		    };
+		    var defaultHtml = $(obj.ele).html();
+		    $(obj.ele).html(obj.beforeText + '' + obj.num + obj.text);
+		    window.countTimer = setInterval(function(){
+		        obj.num--;
+		        if(obj.num<0){
+		            if(typeof obj.callback == 'function'){
+		                obj.callback.call($(obj.ele));
+		            }else{
+		                $(obj.ele).html(defaultHtml);
+		            }
+		            clearInterval(window.countTimer);
+		            window.countTimer = null;
+		        }else{
+		            $(obj.ele).html(obj.beforeText + '' + obj.num + obj.text);
+		        }
+		    },1000)
+}
+
+var mobreg = /^1[3|4|5|7|8]\d{9}$/;
+//获取验证码
+$(function(){
+	$(".getcode").bind("click",getcode)
+})
+function getcode(){
+	var mobile=$('#mobile').val();
+	if(mobile==''){
+		$('.tag').text('手机号码不能为空');return;
+	}else{
+		if(!mobreg.test(mobile)){
+			$('.tag').text('手机号码格式错误');return;
+		}
+	}
+	$.ajax({
+		url:'sendMsg.php?act=getcode',
+		type:"post",
+		dataType:"json",
+		data:{mobile:mobile},
+		success: function(data){
+			if(data.code==1){
+				$('.tag').text('发送成功')
+				$('.getcode').unbind("click");
+				countDownNum({//倒计时
+                    ele:$("#sms"),
+                    num:60,
+                    text:'s后可重新发送',
+                    callback:function(){
+                    	$(".getcode").bind("click",getcode)
+                        $('#sms').text('重新发送');
+                    }
+	            });
+			}else if(data.code==0){
+				$('.tag').text(data.msg)
+			}
+		}
+	})
+}
+var is_ok=false;
+//焦点离开验证短信验证码
+$("#code").blur(function(){
+	var code=$('#code').val()
+	if(code!=''){
+		$.ajax({
+			url:'?act=getsession',
+			type:"post",
+			data:{code:code},
+			dataType:"json",
+			success: function(data){
+				if(data.code==0){
+					$('.tag').text('验证码错误或已过期');
+				}else if(data.code==1){
+					is_ok=true;
+				}
+			}
+		})
+	}
+})
+function add_form(){
+	var mobile=$('#mobile').val();
+	if(mobile==''){
+		$('.tag').text('手机号码不能为空');return;
+	}else{
+		if(!mobreg.test(mobile)){
+			$('.tag').text('手机号码格式错误');return;
+		}
+	}
+	var code=$('#code').val()
+	if(code==''){
+		$('.tag').text('验证码不能为空');return;
+	}
+	
+	if(!is_ok){
+		$('.tag').text('验证码错误或已过期');return;
+	}
+	
+	var password=$("input[name='password']").val();
+	if(password==''){
+		$('.tag').text('密码不能为空');return;
+	}
+	var repassword=$("input[name='repassword']").val();
+	if(password!=repassword){
+		$('.tag').text('两次输入的密码不相同');return;
+	}
+	var num=0;
+	  if(password.search(/[A-Z]/)!=-1){
+	  num+=1;
+	  }
+	  if(password.search(/[0-9]/)!=-1){
+	  num+=1;
+	  }
+	  if(password.search(/[a-z]/)!=-1){
+	 	 num+=1;
+	  }
+	  if(password.search(/[^A-Za-z0-9]/)!=-1){
+	  	num+=1;
+	  }
+	  if(num<2){
+		  $('.tag').text('密码不能单独使用一种字符');return;
+	  }
+	  if(!(password.length>=8 && password.length<=20)){
+		  $('.tag').text('密码需在8~20个字符');return;
+	  }
+	/* if(!$('#agree').is(':checked')) {
+		$('.tag').text('请先阅读注册条款');return;
+	} */
+	$.ajax({
+		url:'?act=register',
+		type:"POST",
+		dataType:"json",
+		data: {mobile:mobile,password:password},
+		success: function(data){
+			if(data.code>0){
+				location.href='info.php';
+			}else{
+				$('.tag').text(data.msg)
+			}
+		}
+	})
+}
+</script>
+{/literal}
+</body>
+</html>

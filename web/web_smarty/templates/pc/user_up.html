@@ -1,0 +1,394 @@
+{include file="pc/heard.html"}
+<script src="js/jquery.md5.js"></script>
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+			{if $cid eq 20}
+			<!-- 信息修改start -->
+				<div class="title">{$menu_info.class_name_cn}</div>
+				<div class="content">
+					<div class="tag4"></div>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="member_table2">
+						<tr>
+							<td width="32%" align="right">用户名：</td>
+							<td width="43%" align="left"><label for="textfield"></label>
+							<input type="text" class="input01" id="username" value="{$user.username}" onfocus="$('.tag4').text('')" /></td>
+						</tr>
+						<tr>
+							<td align="right">出生年月：</td>
+							<input type="hidden" id='ps' value="{$user.password}" />
+							<td align="left">
+								<div class="select01" id="year">
+									<b>{$user.birthday|substr:0:4}</b><i></i>
+									<ul></ul>
+								</div>
+								<div class="select01" id='month'>
+									<b>{$user.birthday|substr:5:2}</b><i></i>
+									<ul></ul>
+								</div>
+								<div class="select01" id='day'>
+									<b>{$user.birthday|substr:8:2}</b><i></i>
+									<ul></ul>
+								</div>
+							</td>
+							<td align="left"><span class="color_f60">此项无法修改</span></td>
+						</tr>
+						<tr>
+							<td align="right">性别：</td>
+							<td align="left"><b data-val="1" class="radio{if $user.sex eq 1} hover{/if}">男</b><b data-val="2" class="radio{if $user.sex eq 2} hover{/if}">女</b></td>
+							<td align="left"><span class="color_f60">此项无法修改</span></td>
+						</tr>
+						<tr>
+							<td align="right">真实姓名：</td>
+							<td align="left"><input type="text" id="name" class="input01" value="{$user.name}" maxlength="50" onfocus="$('.tag4').text('')" /></td>
+							<td width="25%" align="left"><!-- <span class="color_f60">此项无法修改</span> --></td>
+						</tr>
+						<tr>
+							<td align="right">省市：</td>
+							<td align="left">
+								<div class="select01" id="province">
+									<b>{$user.province}</b><i></i>
+									<ul>
+									{foreach $province as $v}
+									<li data-val="{$v.id}">{$v.province}</li>
+									{/foreach}
+									</ul>
+									<input type="hidden" id="province_id" value="{$user.province_id}" />
+								</div>
+								<div class="select01" id="city">
+									<b>{$user.city}</b><i></i>
+									<ul>
+									{foreach $city as $v}
+									<li data-val="{$v.gmo_cd}">{$v.city}</li>
+									{/foreach}
+									</ul>
+									<input type="hidden" id="city_id" value="{$user.city_id}" />
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="right">地址：</td>
+							<td align="left"><input type="text" id="address" class="input01" value="{$user.address}" maxlength="200" onfocus="$('.tag4').text('')" /></td>
+						</tr>
+						<tr>
+							<td align="right">手机号：</td>
+							<input type="hidden" id="_mobile" value="{$user.mobile}" />
+							<td align="left"><input type="text" id="mobile" class="input01" value="{$user.mobile}" maxlength="11" onfocus="$('.tag4').text('')" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} />
+							</td>
+							<td><a class="but02" style="display:none">获取验证码</a></td>
+						</tr>
+						<tr style="display:none" class="code">
+							<td align="right">验证码：</td>
+							<td align="left"><input type="text" id="code" class="input01" maxlength="6" onfocus="$('.tag4').text('')" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /></td>
+						</tr>
+						<tr>
+							<td align="right">E-mail address：</td>
+							<td align="left"><input type="text" id="email" class="input01" value="{$user.email}" maxlength="50" onfocus="$('.tag4').text('')" /></td>
+						</tr>
+						<tr>
+							<td height="70" colspan="3" align="center" valign="bottom"><a onclick='up_form()' class="but01 zx1">立即提交</a><a class="but01 zx2" style="display:none;">正在提交</a></td>
+						</tr>
+					</table>
+				</div>
+			
+			<!-- 信息修改end -->
+			{elseif $cid eq 21}
+			<!-- 修改密码start -->
+				<div class="title">{$menu_info.class_name_cn}</div>
+				<div class="content">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="member_table2">
+						<tr>
+							<td width="32%" align="right">&nbsp;</td>
+							<td width="68%" align="left"><label for="textfield"></label></td>
+						</tr>
+						<tr>
+							<td align="right">&nbsp;</td>
+							<td align="left">&nbsp;</td>
+						</tr>
+						<div class="tag4" style="top:160px;"></div>
+						<tr>
+						<input type="hidden" id='ps' value="{$user.password}" />
+							<td align="right">旧密码：</td>
+							<td align="left"><input type="password" class="input01" id="pass" maxlength="20" style="ime-mode:disabled;" onfocus="$('.tag4').text('')" /></td>
+						</tr>
+						<tr>
+							<td align="right">新密码：</td>
+							<td align="left"><input type="password" class="input01" id="password"  maxlength="20" style="ime-mode:disabled;" onfocus="$('.tag4').text('')" placeholder="密码：8-20位,由字母,数字和符号中至少两种组合" /></td>
+						</tr>
+						<tr>
+							<td align="right">确认密码：</td>
+							<td align="left"><input type="password" class="input01" id="repassword"  maxlength="20" style="ime-mode:disabled;" onfocus="$('.tag4').text('')" placeholder="确认密码" /></td>
+						</tr>
+						<tr>
+							<td height="70" colspan="2" align="center" valign="bottom"><a onclick='up_pass()' class="but01 zx1">立即提交</a><a class="but01 zx2" style="display:none;">正在提交</a></td>
+						</tr>
+					</table>
+				</div>
+				<!-- 修改密码end -->
+			{/if}
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
+<!-- {include file="pc/yz.html"} -->
+{literal}
+<script>
+$(function(){
+	var prior=$('#prior').val()
+	if(prior==''){
+		$('.pop2').fadeIn()
+	}
+})
+function up_pass(){
+	var pass=$('#pass').val()
+	var password=$('#password').val()
+	var repassword=$('#repassword').val()
+	if(password=='' || pass==''){
+		$('.tag4').text('密码不能为空');return;
+	}
+	if(pass==password){
+		$('.tag4').text('请设置与当前密码不同的新密码');return;
+	}
+	if(password!=repassword){
+		$('.tag4').text('两次输入的密码不相同');return;
+	}
+	var num=0;
+	  if(password.search(/[A-Z]/)!=-1){
+	  num+=1;
+	  }
+	  if(password.search(/[0-9]/)!=-1){
+	  num+=1;
+	  }
+	  if(password.search(/[a-z]/)!=-1){
+	 	 num+=1;
+	  }
+	  if(password.search(/[^A-Za-z0-9]/)!=-1){
+	  	num+=1;
+	  }
+	  if(num<2){
+		  $('.tag4').text('密码不能单独使用一种字符');return;
+	  }
+	  if(!(password.length>=8 && password.length<=20)){
+		  $('.tag4').text('密码需在8~20个字符');return;
+	  }
+	//隐藏按钮
+	$('.zx1').attr('style','display: none;')
+	$('.zx2').attr('style','display: block;')
+	$('.zx2').attr('style','background: url(images/member_but01_c.png) no-repeat;')
+	$.ajax({
+		url:'?act=uppass',
+		type:"POST",
+		dataType:"json",
+		data: {pass:pass,password:password},
+		success: function(data){
+			if(data.code==1){
+				alert(data.msg)
+				location.href='login.php?url=up';
+			}else{
+				//显示按钮
+				$('.zx2').attr('style','display: none;')
+				$('.zx1').attr('style','display: block;')
+				$('.tag4').text(data.msg)
+			}
+		}
+	})
+}
+var mobreg = /^1[3|4|5|7|8]\d{9}$/;
+function up_form(){
+	var username=$('#username').val()
+	if(username==''){
+		$('.tag4').text('请填写用户名');return;
+	}
+	/* var Y=$('#year b').text()
+	var M=$('#month b').text()
+	var D=$('#day b').text()
+	if(Y=='' || M=='' || D==''){
+		alert('请选择生日');return;
+	}
+	var sex=$('.radio.hover').data("val")
+	if(sex==undefined){
+		alert('请选择性别');return;
+	} */
+	var name=$('#name').val()
+	/* if(name==''){
+		$('.tag4').text('请填写真实姓名');return;
+	} */
+	var province=$('#province b').text()
+	var city=$('#city b').text()
+	var province_id=$('#province_id').val()
+	var city_id=$('#city_id').val()
+	if(province=='' || province_id==''){
+		$('.tag4').text('请选择省份');return;
+	}
+	if(city=='' || city=='请选择市' || city_id==''){
+		$('.tag4').text('请选择市');return;
+	}
+	var address=$('#address').val()
+	if(address==''){
+		$('.tag4').text('请填写详细地址');return;
+	}
+	var email=$('#email').val()
+	var reg=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	if(email==''){
+		$('.tag4').text('请填写邮箱');return;
+	}else{
+		if(!reg.test(email)){
+			$('.tag4').text('邮箱格式错误');return;
+		}
+	}
+	var _mobile=$('#_mobile').val()//原手机
+	var mobile=$('#mobile').val()
+	var code=$('#code').val()
+	if(mobile!=_mobile){
+		if(mobile==''){
+			$('.tag4').text('手机号码不能为空');return;
+		}else{
+			if(!mobreg.test(mobile)){
+				$('.tag4').text('手机号码格式错误');return;
+			}
+		}
+		if(code==''){
+			$('.tag4').text('验证码不能为空');return;	
+		}
+	}
+	//隐藏按钮
+	$('.zx1').attr('style','display: none;')
+	$('.zx2').attr('style','display: block;')
+	$('.zx2').attr('style','background: url(images/member_but01_c.png) no-repeat;')
+	$.ajax({
+		url:'?act=upinfo',
+		type:"POST",
+		dataType:"json",
+		data: {name:name,province:province,province_id:province_id,city:city,city_id:city_id,address:address,email:email,mobile:mobile,code:code,username:username},
+		success: function(data){
+			if(data.code==1){
+				alert(data.msg)
+				location.href='user.php';
+			}else{
+				$('.tag4').text(data.msg)
+				//显示按钮
+				$('.zx2').attr('style','display: none;')
+				$('.zx1').attr('style','display: block;')
+			}
+		}
+	})
+	
+}
+$('#province li').click(function() {
+	//获取城市列表
+	var p_id=$(this).data('val')
+	$('#province_id').val(p_id)
+	if(p_id == undefined){
+		$("#city ul").html('<li data-val="">请选择市</li>');
+	}else{
+		$.get("info.php?act=getcity",{p_id:p_id},function(data){
+			if(data!=""){
+				$("#city ul").html('<li data-val="">请选择市</li>');
+				$.each(data,function(index,row){
+					$("#city ul").append('<li data-val="'+row['gmo_cd']+'">'+row['city']+'</li>');
+				})
+				$('#city b').text('请选择市')
+				$('#city_id').val('')
+				//城市事件
+				$('#city li').click(function() {
+					$('#city b').text($(this).text())
+					$('#city_id').val($(this).data('val'))
+				})
+			}
+		},"json")
+	}
+})
+
+//改变手机号码，显示输入框
+//$('#mobile').change(function(){
+$("#mobile").keyup(function(){
+	var _mobile=$('#_mobile').val()
+	if(_mobile!=$(this).val()){
+		$('.but02,.code').fadeIn()
+	}else{
+		$('.but02,.code').fadeOut()
+	}
+})
+$("#mobile").change(function(){
+	var _mobile=$('#_mobile').val()
+	if(_mobile!=$('#mobile').val()){
+		$('.but02,.code').fadeIn()
+	}else{
+		$('.but02,.code').fadeOut()
+	}
+});
+//获取验证码
+$(function(){
+	$(".but02").bind("click",getcode)
+})
+function getcode(){
+	var mobile=$('#mobile').val();
+	if(mobile==''){
+		$('.tag4').text('手机号码不能为空');return;
+	}else{
+		if(!mobreg.test(mobile)){
+			$('.tag4').text('手机号码格式错误');return;
+		}
+	}
+	$.ajax({
+		url:'sendMsg.php?act=upmobile',
+		type:"post",
+		dataType:"json",
+		data:{mobile:mobile},
+		success: function(data){
+			if(data.code==1){
+				$('.tag4').text('发送成功')
+				$('.but02').unbind("click");
+				countDownNum({//倒计时
+                    ele:$(".but02"),
+                    num:60,
+                    text:'s后可重新发送',
+                    callback:function(){
+                    	$(".but02").bind("click",getcode)
+                        $('.but02').text('重新发送');
+                    }
+	            });
+			}else if(data.code==0){
+				$('.tag4').text(data.msg)
+			}
+		}
+	})
+}
+
+function countDownNum(options){
+		    var obj = {
+		        beforeText:'',//默认倒计时前面文字
+		        text:'S',//默认倒计时后面文字
+		        num:120,//默认倒计时120秒
+		        ele:'#sms'//默认倒计时元素
+		    };
+		    for(var i in options){
+		        obj[i] = options[i];
+		    }
+		    window.countTimer = null;
+		    clearInterval(window.countTimer);
+		    if(!Number(obj.num)){
+		        console.error('请传入合法数字');
+		        return false;
+		    };
+		    var defaultHtml = $(obj.ele).html();
+		    $(obj.ele).html(obj.beforeText + '' + obj.num + obj.text);
+		    window.countTimer = setInterval(function(){
+		        obj.num--;
+		        if(obj.num<0){
+		            if(typeof obj.callback == 'function'){
+		                obj.callback.call($(obj.ele));
+		            }else{
+		                $(obj.ele).html(defaultHtml);
+		            }
+		            clearInterval(window.countTimer);
+		            window.countTimer = null;
+		        }else{
+		            $(obj.ele).html(obj.beforeText + '' + obj.num + obj.text);
+		        }
+		    },1000)
+}
+</script>
+{/literal}

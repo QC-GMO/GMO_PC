@@ -1,0 +1,206 @@
+<div class="pop2">
+	<div class="pop_content" style="lefT: 45%;">
+		<div class="yz_err"></div>
+		<div class="close">
+			<a><img src="images/close.png"
+				width="21" height="21" /></a>
+		</div>
+		<h3>
+			<img src="images/member_img01.png" width="48" /> 身份验证
+		</h3>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td width="21%" align="right">出生年月：</td>
+				<td>
+					<div class="select01" id="year_y">
+						<b>年</b><i></i>
+						<ul>
+						</ul>
+					</div>
+					<div class="select01" id='month_y'>
+						<b>月</b><i></i>
+						<ul>
+						</ul>
+					</div>
+					<div class="select01" id='day_y'>
+						<b>日</b><i></i>
+						<ul>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">密码：</td>
+				<td><input class="_yz" type="password" id="password1" maxlength="20"
+					onfocus="$('.yz_err').text('')" /></td>
+			</tr>
+			<tr>
+			<input type="hidden" id="prior" value="{$prior}" />
+			<input type="hidden" id="yz_mobile" value="{$smarty.cookies.member_mobile}" />
+			<input type="hidden" id="yz_yz" value="" />
+				<td height="65" colspan="2" align="center" valign="bottom"><a
+					class="but01" onclick="yz();">立即验证</a></td>
+			</tr>
+		</table>
+	</div>
+</div>
+{literal}
+<script>
+$(function(){
+	$('.yz_q').click(function(){
+		var mobile=$('#yz_mobile').val()
+		$('.close a').click(function(){
+			$('.pop2').fadeOut()
+		})
+		$('#yz_yz').val($(this).attr('href'))
+		var arr=[11,12,13];
+		var arr2=[20,21,24];
+		if((location.href.split('/')[location.href.split('/').length-1].split('?')[0]!='integral.php' && $.inArray($(this).data("val"), arr)>=0)){
+			if(mobile==''){
+				location.href='login.php';
+			}
+			$('.pop2').fadeIn()
+			return false;
+		}else if($.inArray($(this).data("val"), arr2)>=0){
+			if(mobile==''){
+				location.href='login.php';
+			}
+			$('.pop2').fadeIn()
+			return false;
+		}
+	})
+	$('a').click(function(){
+		var mobile=$('#yz_mobile').val()
+		$('.close a').click(function(){
+			$('.pop2').fadeOut()
+		})
+		var str=location.href;
+		var _url=$(this).attr('href')
+		$('#yz_yz').val(_url)
+		if(_url){
+			if(str.indexOf('integral.php')<0 && _url.indexOf('integral.php')>-1){
+				if(mobile==''){
+					location.href='login.php';
+				}
+				$('.pop2').fadeIn()
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			return true;
+		}
+		
+	})
+	$('.select01').click(function() {
+		$('.yz_err').text('')
+		$('.tag').text('')
+		$('.tag4').text('')
+		$(this).find('ul').slideToggle()
+		$(this).siblings('.select01').find('ul').slideUp()
+		return false
+	});
+	$('.select01 li').click(function() {
+	    var text1 = $(this).text();
+	    var id = $(this).data("id");
+	    $(this).parent('ul').slideUp().siblings('b').text(text1)
+	    $(this).parent('ul').slideUp().siblings('b').attr("data-id", id)
+		return false
+	});
+})
+function yz(){
+	var y=$('#year_y b').text()
+	if(y=='' || y=='年'){
+		$('.yz_err').text('请选择年份');return;
+	}
+	var m=$('#month_y b').text()
+	if(m=='' || m=='月'){
+		$('.yz_err').text('请选择月份');return;
+	}
+	var d=$('#day_y b').text()
+	if(d=='' || d=='日'){
+		$('.yz_err').text('请选择日');return;
+	}
+	var password=$('#password1').val()
+	if(password==''){
+		$('.yz_err').text('请输入密码');return;
+	}
+	//console.log($.md5(password));
+	var url_=$('#yz_yz').val()
+	$.ajax({
+		url:'login.php?act=yz',
+		type:"POST",
+		dataType:"json",
+		data: {y:y,m:m,d:d,password:password},
+		success: function(data){
+			if(data.code==1){
+				$('.pop2').fadeOut()
+				if(url_){
+					location.href=url_;
+				}
+			}else{
+				$('.yz_err').text(data.msg)
+			}
+		}
+	})
+	
+}
+$("._yz").keyup(function(event){
+	if(event.keyCode ==13){
+		yz();
+	  }
+})
+$(document).keyup(function(event){
+	if(event.keyCode ==27 && $('.pop2').css('display')=='block'){
+		//alert('dsw')
+	  }
+})
+//设置验证生日年份
+var year_y=new Date().getFullYear()
+var stryear = '';
+for( var i = year_y-15; i > year_y-100; i-- ){
+	stryear+='<li>'+i+'</li>'
+}
+$( '#year_y ul' ).html( stryear );
+//设置月份
+var strmonth = '';
+for( var i = 12; i > 0; i-- ){
+	strmonth+='<li>'+i+'</li>'
+}
+$( '#month_y ul' ).html( strmonth );
+//获取年份
+$("#year_y li").click(function(){
+	var y=$(this).text()
+	$('#year_y b').val(y)
+})
+//获取月份
+$("#month_y li").click(function(){
+	  var m=$(this).text()
+	  $('#month_y b').val(m)
+	  var y=$('#year_y b').val()
+	  //判断当前月份天数
+	  if(m=='1'||m=='3'||m=='5'||m=='7'||m=='8'||m=='10'||m=='12'){
+		  var i=31;
+	  }else if(m=='2'){
+		  if((y%4==0 && y%100!=0) || y%400==0){  
+			  var i=29;
+          }  
+          else{  
+        	  var i=28;
+          } 
+	  }else{
+		  var i=30;
+	  }
+	  var strday = '';
+	  for( i; i > 0; i-- ){
+	  	strday+='<li>'+i+'</li>'
+	  }
+	  $( '#day_y ul' ).html( strday );
+	//获取日
+	  $("#day_y li").click(function(){
+	  	var d=$(this).text()
+	  	  $('#day_y b').text(d)
+	  })
+})
+</script>
+{/literal}

@@ -1,0 +1,58 @@
+{include file="pc/heard.html"}
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+				<div class="title">{$menu_info.class_name_cn}</div>
+				<div class="content">
+					<div class="member_title">
+					{foreach $parent_menu_message3 as $k=>$v}
+					<a href="{$v.class_url}?cid={$v.class_id}"{if $cid eq $v.class_id} class="hover"{/if}>{$v.class_name_cn}</a>
+					{/foreach}
+					</div>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="member_table">
+					{if $cid eq 18}
+						<tr>
+							<th width="15%">问卷编号</th>
+							<th width="25%">名称</th>
+							<th width="20%">来源</th>
+							<th width="20%">获得时间</th>
+							<th width="20%">获得积分</th>
+						</tr>
+						{foreach $integral as $k=>$v}
+						<tr>
+							<td>{if $v.survey_id eq ''}---{else}<img src="images/icon_03.gif" width="17" height="19" /> {$v.survey_id}{/if}</td>
+							<td align="center">{if $v.survey_name eq ''}---{else}{$v.survey_name}{/if}</td>
+							<td align="center">{$v.source}</td>
+							<td align="center">{$v.add_time}</td>
+							<td align="center">{if $v.type eq 2}-{/if}{$v.val}</td>
+						</tr>
+						{/foreach}
+					{elseif $cid eq 19}
+						<tr>
+							<th width="30%">兑换商品名称</th>
+							<th width="20%">兑换时间</th>
+							<th width="10%">使用积分</th>
+							<th width="10%">操作状态</th>
+						</tr>
+						{foreach $order as $k=>$v}
+						<tr>
+							<td align="center"><span class="icon01">
+							{if $v.type eq 1}
+							{foreach $v.item_list as $k1=>$v1}{$v1.title}X{$v1.num}<br>{/foreach}
+							{else}兑换现金{/if}
+							</span></td>
+							<td align="center">{$v.add_time}</td>
+							<td align="center">{$v.total}</td>
+							<td align="center">{$v.status_txt}</td>
+						</tr>
+						{/foreach}
+					{/if}
+					</table>
+					{include file="pc/page.html"}
+				</div>
+			</div>
+		</div>
+	{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}

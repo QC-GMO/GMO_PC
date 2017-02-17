@@ -1,0 +1,84 @@
+{include file="pc/heard.html"}
+<script src="js/jquery.md5.js"></script>
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+				<div class="title">{$menu_info.class_name_cn}</div>
+				<div class="content">
+					<div class="tag2">
+					注意：
+您现在持有的积分将被清零。若您有积分兑换申请尚未完成，该申请也将自动取消。
+积分清零后，再次注册或登录本网站，之前的积分也将无法恢复，请知悉。<br>
+					请填写注销原因，注销后会员信息都将消失。</div>
+					<div class="member_form">
+						<ul class="clearfix">
+							<li class="checkbox" data-val="收到的问卷太少">收到的问卷太少</li>
+							<li class="checkbox" data-val="问卷时效太短">问卷时效太短</li>
+							<li class="checkbox" data-val="没有好的产品兑换">没有好的产品兑换</li>
+							<li class="checkbox" data-val="收到的问卷太多">收到的问卷太多</li>
+							<li class="checkbox" data-val="系统出错频繁">系统出错频繁</li>
+							<li class="checkbox" data-val="问卷太难理解">问卷太难理解</li>
+							<li class="checkbox" data-val="积分太少">积分太少</li>
+						</ul>
+						<textarea id="other" cols="" rows="" {literal}onfocus="if(this.value=='请填写其他原因'){this.value='';}"  onblur="if(this.value==''){this.value='请填写其他原因';}"{/literal} >请填写其他原因</textarea>
+					</div>
+					<input type="hidden" id="num" value="{$num}" />
+					<div class="but2"><a class="but01" onclick="zhuxiao();">注销</a></div>
+					
+				</div>
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
+<input type="hidden" id='ps' value="{$user.password}" />
+<!-- {include file="pc/yz.html"} -->
+{literal}
+<script>
+$(function(){
+	var prior=$('#prior').val()
+	if(prior==''){
+		$('.pop2').fadeIn()
+	}
+})
+function zhuxiao(){
+	var reason=new Array(0);
+	$(".checkbox.hover").each(function(){
+		reason.push($(this).data('val'))
+	});
+	var other=$('#other').val()
+	if((other=='' || other=='请填写其他原因') && reason.length==0){
+		alert('至少勾选或者填写一个原因');return;
+	}
+	var num=$('#num').val()
+	if(num>0){
+		if(!confirm('您还有'+num+'条申请中的订单，确定要注销吗？一旦注销订单将作废！')){
+			return false;
+		}
+	}
+	//隐藏按钮
+	$('.but2 .but01').fadeOut()
+	$.ajax({
+		url:'?act=zhuxiao',
+		type:'post',
+		dataType:'json',
+		data:{reason:reason,other:other},
+		success:function(data){
+			alert(data.msg)
+			if(data.code==1){
+				location.href='index.php';
+			}else{
+				//显示按钮
+				$('.but2 .but01').fadeIn()
+			}
+		}
+	})
+}
+$(function(){
+	$('.checkbox').click(function(){
+		$(this).toggleClass('hover')
+	})
+})
+</script>
+{/literal}

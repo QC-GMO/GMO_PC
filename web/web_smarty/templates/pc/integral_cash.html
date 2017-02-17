@@ -1,0 +1,69 @@
+{include file="pc/heard.html"}
+<script src="js/jquery.md5.js"></script>
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+				<div class="title">积分兑换</div>
+				<div class="content">
+					<div class="faq_title">
+					<input type="hidden" id="crypt" value="{$crypt}" />
+					{foreach $parent_menu_message3 as $k=>$v}
+					<!-- <a class='confirm' href="http://www.test.damaicheng.com/test/index.php?r=gmo/default&token={$crypt}" target="_blank"><span>{$v.class_name_cn}</span></a> -->
+					<a class="yz_q{if $cid eq $v.class_id} hover{/if}" data-val="{$v.class_id}" href="{$v.class_url}?cid={$v.class_id}"><span>{$v.class_name_cn}</span></a>
+					{/foreach}
+					</div>
+					<div class="exchange"><h3>兑换规则</h3>
+						<p><span class="color_c62522">● </span>兑换倍率： Z.com Research积分100P＝人民币1元，积分兑现10元起兑。</p>
+						<p><span class="color_c62522">● </span>受支付宝、微信限额等规则影响，通过支付宝兑现需每笔额外收取1%的积分(即兑换金额的1%)作为手续费；通过微信兑现需每笔<br>&nbsp;&nbsp;&nbsp;额外收取16%的积分(即兑换金额的16%)作为手续费（该费用由支付宝、微信等第三方收取，Z.com Research代为扣除）</p>
+						<p><span class="color_c62522">● </span>为保证兑换账户无误，会员需使用微信或支付宝验证后方可申请兑换。</p>
+					</div>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="member_table2">
+						<tr>
+							<td width="28%" align="right">输入兑换积分</td>
+							<td width="72%" align="left"><input type="text" id="fen" class="input02" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /></td>
+						</tr>
+						<tr>
+							<td align="right">可兑换现金</td>
+							<td align="left"><input type="text" id="qian" disabled="disabled" class="input02" /></td>
+						</tr>
+					</table>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="member_table2 exchange_table">
+						<tr>
+							<td colspan="3" align="center"><h3>请选择收款方式</h3></td>
+						</tr>
+						<tr>
+							<td width="40%" align="right"><b class="radio">&nbsp;</b><img src="images/exchange_img01.jpg" width="104" height="28" /></td>
+							<td width="60%" align="center"><b class="radio">&nbsp;</b><img src="images/exchange_img02.jpg" width="120" height="28" /></td>
+						</tr>
+						<tr>
+							<td height="90" colspan="3" align="center" valign="middle"><a class="but01">立即提交</a></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
+<input type="hidden" id='ps' value="{$user.password}" />
+<!-- {include file="pc/yz.html"} -->
+{literal}
+<script>
+$(function(){
+	var prior=$('#prior').val()
+	if(prior==''){
+		$('.pop2').fadeIn()
+		$('.close a').click(function(){
+			window.history.back();
+		})
+	}
+})
+$("#fen").change(function(){
+	  var fen=$('#fen').val()
+	  $('#qian').val(fen/100)
+	  
+});
+
+</script>
+{/literal}

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="icon" type="image/x-icon" href="zcom.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{$menu_info1.class_keywords_cn}" />
+<meta name="description" content="{$menu_info1.class_description_cn}"/> 
+<title>{$menu_info.class_name_cn}|{if $parent_menu_message.class_name_cn neq ''}{$parent_menu_message.class_name_cn}|{/if}{$menu_info1.class_title_cn}</title>
+<link href="css/css.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.8.3.min.js"></script>
+<script src="js/jquery.SuperSlide.2.1.js"></script>
+</head>
+
+<body>
+<div class="head">
+	<div class="w1200">
+		<!--<b href="#" class="language"><span>请选择语言版本</span><i></i>
+			<ul>
+				<li><a href="#">中文简体</a></li>
+				<li><a href="#">中文繁体</a></li>
+				<li><a href="#">English</a></li>
+			</ul>
+		</b>-->
+		{if $smarty.cookies.member_mobile neq ''}<span>欢迎您，{$user.username}！</span> <a href="login.php?act=logout">退出</a>
+		{else}<a href="login.php">登录</a> | <a href="register.php">注册</a>{/if}
+	</div>
+</div>
+<div class="w1200">
+	<div class="top clearfix">
+		<div class="logo fl"><a href="index.php"><img src="images/logo.gif" width="287" height="44" /></a></div>
+		<div class="nav fr">
+			<ul>
+			{foreach $top_array as $k=>$val}
+			<li{if $k eq 0} class="home"{/if}><a class="yz_q" data-val="{$val.class_id}" href="{if $val.class_id eq 15}jsz.php{else}{$val.class_url}{/if}"><img src="images/nav_icon0{$k+1}.png" />{$val.class_name_cn}</a></li>
+			{/foreach}
+			</ul>
+		</div>
+	</div>
+

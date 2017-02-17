@@ -1,0 +1,19 @@
+{include file="pc/heard.html"}
+<div class="main clearfix">
+		<div class="left fl">
+			<div class="box member">
+				<div class="title">{if $smarty.get.tid neq ''}通知信息{else}{$menu_info.class_name_cn}{/if}</div>
+				<div class="content">
+				{if $smarty.get.tid neq ''}
+				<div class="new_detail"><h3>{$about.title_cn}</h3><span>{$about.add_time|date_format:"%Y-%m-%d"}</span></div>
+				{/if}
+					<div class="about">
+						{$about.content_cn}
+					</div>
+				</div>
+			</div>
+		</div>
+		{include file="pc/right.html"}
+	</div>
+</div>
+{include file="pc/foot.html"}
