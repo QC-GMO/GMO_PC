@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+</head>
+<body class="overflow body_bg_1">
+<div id="login">
+<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center" valign="middle">
+    <table width="576" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><img src="images/login_top.gif" width="576" height="100"/></td>
+      </tr>
+      <tr>
+        <td><table width="576" border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="190" align="left"><img src="images/login_left.gif" width="190" height="167"/></td>
+            <td width="378" align="left" valign="middle">
+{if $smarty.get.action eq 'login'}
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td height="75" colspan="2" align="left">{$ErrorMessages}</td>
+              </tr>
+              <tr>
+                <td width="15%" height="30" align="left">&nbsp;</td>
+                <td width="85%" align="left"><input name="返回" type="button" class="lostfocus" value=" 返 回 " onClick="location.href='{$CurrentPageName}';" /></td>
+              </tr>
+            </table>
+{else}
+            <form id="Login" method="post" action="?action=login">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="15%" height="25" align="left">用户名：</td>
+                <td width="85%" align="left"><input name="UserName" type="text" class="input_login" size="16" id="UserName"/></td>
+              </tr>
+              <tr>
+                <td height="25" align="left">密　码：</td>
+                <td align="left"><input name="PassWord" type="password" class="input_login" size="16" id="PassWord"/></td>
+              </tr>
+              <tr>
+                <td height="25" align="left">验证码：</td>
+                <td align="left"><input name="CheckCode" type="text" class="input_login" size="8" maxlength="4" id="CheckCode"/><span style="position:absolute; margin:0px 3px;"><img src="../web_include/checkcode.php?action={$web.Web_CheckCode}&s='+Math.random()" width="45" height="20" border="0" class="cursor_p" title="看不清楚，换张图片" onClick="this.src='../web_include/checkcode.php?action=NUMBER&s='+Math.random()"/></span></td>
+              </tr>
+              <tr>
+                <td height="30" align="left">&nbsp;</td>
+                <td align="left">
+                <input name="登录" type="submit" class="lostfocus" value=" 登 录 "/></td>
+              </tr>
+            </table>
+             </form> 
+{/if}
+            </td>
+            <td width="8" align="right"><img src="images/login_right.gif" width="8" height="167"/></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td><img src="images/login_bottom.gif" width="576" height="80"/></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+</div>
+</body>
+</html>

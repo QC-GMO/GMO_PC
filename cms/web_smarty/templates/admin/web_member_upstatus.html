@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>网站管理系统</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery.form.js"></script>
+    <script type="text/javascript" src="../js/jquery.alerts.js"></script>
+    <script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+    <script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+    <script type="text/javascript" src="js/function.js"></script>
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="3" class="title_b bg_bai">会员信息管理</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="45%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}">信息管理首页</a> 
+    <!-- <a href="{$CurrentPageName}?action=add">添加信息</a> | -->
+    </td>
+    <td width="40%" align="left" class="border tr_out p_l_10"> 
+    </td>
+  </tr>
+</table>
+{if $smarty.get.action eq 'add'}
+{else}
+<form action="?action=status" method="post" enctype="multipart/form-data" name="myform">
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+        <tr align="center">
+            <td class="title_b bg_bai" colspan="2">批量修改会员状态</td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+    	<tr class="content_list list_0">
+            <td width="15%" align="center" class="border tr_over b">上传会员文件：</td>
+            <td class="border tr_out p_l_5"><input type="file" name='status' /> <a href='../uploadfiles/data/upstatus.csv'><u>点击下载示例文件</u></a></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center" class="tr_out">
+                <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+                <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+        </tr>
+    </table>
+</form>
+{/if}
+</body>
+</html>

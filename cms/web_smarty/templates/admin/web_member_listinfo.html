@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>网站管理系统</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css"/>
+    <link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <script type="text/javascript" src="../js/jquery.form.js"></script>
+    <script type="text/javascript" src="../js/jquery.alerts.js"></script>
+    <script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+    <script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+    <script type="text/javascript" src="js/function.js"></script>
+    <script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="3" class="title_b bg_bai">会员信息管理</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="45%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}">信息管理首页</a> 
+    <!-- <a href="{$CurrentPageName}?action=add">添加信息</a> | -->
+    </td>
+    <td width="40%" align="left" class="border tr_out p_l_10"> 
+    </td>
+  </tr>
+</table>
+{if $smarty.get.action eq 'add'}
+<form action="?action=insert" method="post" enctype="multipart/form-data" name="myform">
+{elseif $smarty.get.action eq 'edit'}
+<form action="?action=update" method="post" enctype="multipart/form-data" name="myform">
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+        <tr align="center">
+            <td class="title_b bg_bai" colspan="2">修 改 信 息</td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+    	<tr class="content_list list_0">
+            <td width="15%" align="center" class="border tr_over b">用户ID：</td>
+            <td class="border tr_out p_l_5">{$rows.id}</td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">用户名：</td>
+            <td class="border tr_out p_l_5">{$rows.username}</td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">电话：</td>
+            <td class="border tr_out p_l_5">{$rows.mobile}</td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">Emial：</td>
+            <td class="border tr_out p_l_5"><input name="email" type="text" value="{$rows.email}" size="50" id="title_cn"
+                                                   maxlength="200"/></td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">性别：</td>
+            <td class="border tr_out p_l_5">
+            <input type="radio" name="sex" {if $rows.sex eq 1}checked{/if} value="1" />男<input type="radio" name="sex" {if $rows.sex eq 2}checked{/if} value="2" />女<!-- <input type="radio" {if $rows.sex eq 3}checked{/if} name="sex" value="3" />保密 -->
+            </td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">生日：</td>
+            <td class="border tr_out p_l_5">
+            <input name="birthday" type="text" value="{$rows.birthday}" size="50" id="title_cn" maxlength="200" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal}/></td>
+        </tr>
+         <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">真实姓名：</td>
+            <td class="border tr_out p_l_5">{$rows.name}</td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">省市：</td>
+            <td class="border tr_out p_l_5">
+            <select id="province" name="province">
+            	<option>请选择省</option>
+				{foreach $province as $v}
+				<option value="{$v.province}" data-val="{$v.id}" {if $rows.province_id eq $v.id}selected{/if}>{$v.province}</option>
+				{/foreach}
+            </select>
+			<select id="city" name="city">
+				<option>请选择市</option>
+				{foreach $city as $v}
+				<option value="{$v.city}" data-val="{$v.gmo_cd}" {if $rows.city_id eq $v.gmo_cd}selected{/if}>{$v.city}</option>
+				{/foreach}
+			</select>
+            </td>
+        </tr>
+        <input type="hidden" id="province_id" name="province_id" value="{$rows.province_id}" />
+        <input type="hidden" id="city_id" name="city_id" value="{$rows.city_id}" />
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">详细地址：</td>
+            <td class="border tr_out p_l_5">
+            <input name="address" type="text" value="{$rows.address}" size="50" id="title_cn" maxlength="200" /></td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">积分：</td>
+            <td class="border tr_out p_l_5"><a href="?action=integral&id={$rows.id}"><u>{$rows.integral}</u></a>
+            </td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">会员来源：</td>
+            <td class="border tr_out p_l_5">{if $rows.source_type eq 1}自主推广{elseif $rows.source_type eq 2}外部推广{elseif $rows.source_type eq 3}会员推广{/if}</td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">来源code：</td>
+            <td class="border tr_out p_l_5">{$rows.web_code}</td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">会员状态：</td>
+            <td class="border tr_out p_l_5">
+            <select name="status" id="status">
+             <option value="1" {if $rows.status eq 1}selected{/if}>未认证</option>
+             <option value="2" {if $rows.status eq 2}selected{/if}>普通会员</option>
+             <option value="3" {if $rows.status eq 3}selected{/if}>自己注销</option>
+             <option value="4" {if $rows.status eq 4}selected{/if}>强制注销</option>
+            </select>
+            </td>
+        </tr>
+        <tr class="content_list list_0">
+            <td align="center" class="border tr_over b">登录密码：</td>
+            <td class="border tr_out p_l_5"><a href="?action=reset&id={$rows.id}"><input type="button" class="lostfocus confirm btn" value="重置密码"/></a>(密码重置后为：12345678)
+            </td>
+        </tr>
+        <tr>
+            <td align="center" class="border tr_over b">最后登录时间：</td>
+            <td class="border tr_out p_l_5">{$rows.lastlogin_time}</td>
+        </tr>
+        <tr>
+            <td align="center" class="border tr_over b">会员更新时间：</td>
+            <td class="border tr_out p_l_5">{$rows.own_up}</td>
+        </tr>
+        <tr>
+            <td align="center" class="border tr_over b">后台更新时间：</td>
+            <td class="border tr_out p_l_5">{$rows.admin_up}</td>
+        </tr>
+        <tr>
+            <td align="center" class="border tr_over b">注册时间：</td>
+            <td class="border tr_out p_l_5">{$rows.add_time}</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center" class="tr_out">
+                <input name="id" type="hidden" id="id" value="{$rows.id}"/>
+                <input name=" 提交 " type="submit" class="lostfocus btn submit" id=" 提交 " value=" 提交 "/>
+                <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+                <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/></td>
+        </tr>
+    </table>
+</form>
+{literal}
+<script type="text/javascript">
+$(function(){
+	$('#city').change(function(){
+		$('#city_id').val($(this).find("option:selected").data("val"))
+	})
+	$('#province').change(function(){
+		var p_id=$(this).find("option:selected").data("val")
+		$('#province_id').val(p_id)
+		if(p_id == undefined){
+			$("#city").html('<option value="请选择市">选择市</option>');
+		}else{
+			$.get("?action=getcity",{p_id:p_id},function(data){
+				if(data!=""){
+					$("#city").html('<option value="请选择市" data-val="0">选择市</option>');
+					$.each(data,function(index,row){
+						$("#city").append('<option value="'+row['city']+'" data-val="'+row['gmo_cd']+'">'+row['city']+'</option>');
+					})
+					$('#city_id').val('0')
+				}
+			},"json")
+		}
+	})
+});
+$('.submit').click(function(){
+	var email=$("input[name='email']").val()
+	var sex=$("input[name='sex']:checked").val()
+	if(sex=='1'){
+		sex='男';
+	}else if(sex=='2'){
+		sex='女';
+	}
+	var province=$('#province').val()
+	var city=$('#city').val()
+	var birthday=$("input[name='birthday']").val()
+	var address=$("input[name='address']").val()
+	var status=$('#status').find("option:selected").text()
+	if(confirm('确定要修改为这样吗？\rEmail：'+email+'\r性别：'+sex+'\r地址：'+province+city+address+'\r生日：'+birthday+'\r会员状态：'+status)){
+		return true;
+	} else {
+		return false;
+	}
+});
+</script>
+{/literal}
+{elseif $smarty.get.action eq 'integral'}
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border">
+        <tr align="center">
+            <td width="5%" class="title_b bg_bai b">编号</td>
+            <td width="20%" class="title_b bg_bai b">用户ID</td>
+            <td width="20%" class="title_b bg_bai b">积分值</td>
+            <td width="20%" class="title_b bg_bai b">积分来源/去向</td>
+            <td width="20%" class="title_b bg_bai b">时间</td>
+        </tr>
+        {foreach from=$list_array item="list" name="zw"}
+        <tr class="tr_out tr_check">
+            <td align="center" class="border">{$smarty.foreach.zw.iteration}</td>
+            <td align="center" class="border">{$list.uid}</td>
+            <td align="center" class="border p_l_5">
+                {if $list.type eq 1}+{elseif $list.type eq 2}-{/if}{$list.val}
+            </td>
+            <td align="center" class="border">{$list.source}</td>
+            <td align="center" class="border">{$list.add_time}</td>
+        </tr>
+        {foreachelse}
+        <tr class="tr_out">
+            <td height="28" colspan="5" align="center">无数据！</td>
+        </tr>
+        {/foreach}
+        <tr class="bg_bai">
+            <td height="30" colspan="5" align="right">{include file='admin/qc_page.html'}</td>
+        </tr>
+    </table>
+{else}
+<form method="get" action="{$CurrentPageName}">
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+        <tr>
+            <td width="15%" align="center" class="border tr_out b">信息查询：</td>
+            <td width="85%" align="left" class="border tr_out p_l_5">
+            	<select name="status" style="width:134px" >
+            		<option value="" {if $smarty.get.status==''} selected{/if}>请选择状态</option>
+            		<option value="1" {if $smarty.get.status==1} selected{/if}>未认证</option>
+                    <option value="2" {if $smarty.get.status==2} selected{/if}>普通会员</option>
+					<option value="3" {if $smarty.get.status==3} selected{/if}>注销</option>
+					<option value="4" {if $smarty.get.status==4} selected{/if}>强制注销</option>
+                </select>
+                &nbsp;&nbsp;
+                <input name="id" type="text" value="{$smarty.get.id}" size="20" maxlength="30" placeholder="请输入会员ID"/>
+                &nbsp;&nbsp;
+                <input name="username" type="text" value="{$smarty.get.username}" size="20" maxlength="30" placeholder="请输入用户名"/>
+                &nbsp;&nbsp;
+                <input name="mobile" type="text" value="{$smarty.get.mobile}" size="20" maxlength="50" placeholder="请输入手机号码"/>
+                &nbsp;&nbsp;
+                <input name="email" type="text" value="{$smarty.get.email}" size="20" maxlength="50" placeholder="请输入Email"/>
+                &nbsp;&nbsp;
+                <input type="text" name="start" placeholder="请输入注册开始时间" value="{$smarty.get.start}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal} /> -
+                <input type="text" name="end" placeholder="请输入注册结束时间" value="{$smarty.get.end}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal} />
+                &nbsp;&nbsp;
+                <input type="submit" value=" 查 询 " class="lostfocus btn"/></td>
+        </tr>
+    </table>
+</form>
+<form name="myform" method="post" action="?action=operation">
+    <table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border">
+        <tr align="center">
+            <td width="5%" class="title_b bg_bai b">选中</td>
+            <td width="5%" class="title_b bg_bai b">ID</td>
+            <td width="15%" class="title_b bg_bai b">用户名</td>
+            <td width="15%" class="title_b bg_bai b">手机</td>
+            <td width="15%" class="title_b bg_bai b">邮箱</td>
+            <td class="title_b bg_bai b">状态</td>
+            <td class="title_b bg_bai b">最后登录时间</td>
+            <td class="title_b bg_bai b">{$order_time}</td>
+            <td width="15%" class="title_b bg_bai b">操作</td>
+        </tr>
+        {foreach from=$list_array item="list" name="zw"}
+        <tr class="tr_out tr_check">
+            <td align="center" class="border"><input name='id[]' type='checkbox' value='{$list.id}'
+                                                     class="input_check"/></td>
+            <td align="center" class="border">{$list.id}</td>
+            <td align="center" class="border p_l_5">
+                <a href="?action=edit&id={$list.id}">{$list.username}</a>
+            </td>
+            <td align="center" class="border">{$list.mobile}</td>
+            <td align="center" class="border">{$list.email}</td>
+            <td align="center" class="border">{if $list.status eq 1}未认证{elseif $list.status eq 2}普通会员{elseif $list.status eq 3}注销{elseif $list.status eq 4}强制注销{/if}</td>
+            <td align="center" class="border">{$list.lastlogin_time}</td>
+            <td align="center" class="border">{$list.add_time}</td>
+
+            <td align="center" class="border">
+                <!-- <a href="member_message.php?action=look&id={$list.id}">详情</a>&nbsp;&nbsp;
+                {if $list.file_url}
+                <a href="../{$list.file_url}" title="下载附件"><img src="images/openfolder.gif" alt="附件"/></a>&nbsp;&nbsp;
+                {else}
+                <span style="display:inline-block;width:20px;height:20px;">&nbsp;</span>
+                &nbsp;&nbsp;
+                {/if} -->
+                <a href="?action=edit&id={$list.id}"><img src="images/edit.gif" alt="编辑"/></a>&nbsp;&nbsp;
+               <!--  <a href="?action=delete&id={$list.id}" class="del"><img src="images/delete.gif" alt="删除"/></a>&nbsp;&nbsp; -->
+            </td>
+        </tr>
+        {foreachelse}
+        <tr class="tr_out">
+            <td height="28" colspan="9" align="center">无数据！</td>
+        </tr>
+        {/foreach}
+        <tr class="bg_bai">
+            <td height="30" align="center"><input name="checkboxall" type="checkbox" id="checkboxall"
+                                                  class="input_check"/></td>
+            <td height="30" colspan="6" align="left" class="p_l_10"><label for="checkboxall">全选/取消全选</label>
+                <select name="operationclass" id="operationclass">
+                    <option value="">请选择批量操作选项</option>
+                    <option value="batch_delete">-- 批量执行删除 --</option>
+                </select>
+                <input type="submit" name="开始执行" class="lostfocus confirm btn" value=" 开始执行 "/></td>
+                <td height="30" align="center" colspan="3">
+                <a href="?action=down&status={$smarty.get.status}&id={$smarty.get.id}&username={$smarty.get.username}&mobile={$smarty.get.mobile}&email={$smarty.get.email}&start={$smarty.get.start}&end={$smarty.get.end}"><input type="button" class="lostfocus btn" value="下载本次结果信息 "/></a>
+                </td> 
+        </tr>
+        <tr class="bg_bai">
+            <td height="30" colspan="10" align="right">{include file='admin/qc_page.html'}</td>
+        </tr>
+    </table>
+</form>
+{/if}
+</body>
+</html>

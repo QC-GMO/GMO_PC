@@ -1,0 +1,395 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+		<link rel="stylesheet" href="../web_kindeditor/themes/default/default.css" />
+		<script charset="utf-8" src="../web_kindeditor/kindeditor-min.js"></script>
+		<script charset="utf-8" src="../web_kindeditor/lang/zh_CN.js"></script>
+{literal}
+<script>
+var editor_cn;
+var editor_en;
+var editor_jp;
+KindEditor.ready(function(K) {
+	editor_cn = K.create('textarea[name="content_cn"]', {
+		allowFileManager : true
+	});
+})
+KindEditor.ready(function(K) {
+	editor_en = K.create('textarea[name="content_en"]', {
+		allowFileManager : true
+	});
+})
+KindEditor.ready(function(K) {
+	editor_jp = K.create('textarea[name="content_jp"]', {
+		allowFileManager : true
+	});
+})
+</script>
+{/literal}
+
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="3" class="title_b bg_bai">商品信息管理</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="45%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}">信息管理首页</a> |
+    <a href="{$CurrentPageName}?action=add">添加信息</a> |
+    </td>
+    <td width="40%" align="left" class="border tr_out p_l_10"> 
+    </td>
+  </tr>
+</table>
+{if $smarty.get.action eq 'add'}
+<form action="?action=insert" method="post" enctype="multipart/form-data" name="myform">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">添 加 信 息</td>
+  </tr> 
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+  <tr>
+    <td height="35" align="center" valign="bottom" class="bg_bai">
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24">
+        <div class="title_list">
+          <ul>
+          {foreach from=$language_array item="li" name="langli"}
+            <li {if $smarty.foreach.langli.first}class="over"{/if}>{$li}</li>
+          {/foreach}
+          </ul>
+        </div>
+        </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+<tr>
+    <td align="center" class="border tr_over b" width='18%'>信息排序：</td>
+	<td class="border tr_out p_l_5">
+    <select name="order_id" id="order_id" class="en">
+    {html_options options=$order_id selected=$count}
+    </select>
+    </td>
+  </tr> 
+<tr>
+    <td width="15%" align="center" class="border tr_over b">所属栏目：</td>
+    <td width="85%" class="border tr_out p_l_5">
+    <select name="class_id" id="class_id" class="en">
+    {html_options options=$class_array selected=$rows.class_id}
+    </select>
+      </td>
+  </tr> 
+  <tr>
+    <td width="15%" align="center" class="border tr_over b">所属客户：</td>
+  <td width="85%" class="border tr_out p_l_5">
+    <select name="kid" id="class_id" class="en">
+    <option value="">请选择客户信息</option>
+    {foreach $kehu as $k=>$v}
+    <option value="{$v.id}">{$v.title}</option>
+    {/foreach}
+    </select>
+    </td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">信息名称：</td>
+  <td class="border tr_out p_l_5"><input name="title_cn" type="text" class="w_100" id="title_cn" maxlength="200"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">信息名称：</td>
+  <td class="border tr_out p_l_5"><input name="title_en" type="text" class="w_100" id="title_en" maxlength="200"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">信息名称：</td>
+  <td class="border tr_out p_l_5"><input name="title_jp" type="text" class="w_100" id="title_jp" maxlength="200"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">积分价格：</td>
+  <td class="border tr_out p_l_5"><input name="price" type="text" class="w_100" id="title_jp" maxlength="10" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">开启时间：</td>
+  <td class="border tr_out p_l_5"><input name="start_time" type="text" size="20" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal}/> - 
+  <input name="end_time" type="text" size="20" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal}/></td></td></td>
+  </tr>
+  
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">信息图片：</td>
+  <td class="border tr_out p_l_5"><input type="file" name="img_url_cn" id="img_url_cn" size="50" maxlength="200"/>  
+    只允许上传的文件格式为：jpg, gif, png 大小不超过2mb</td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">信息图片：</td>
+  <td class="border tr_out p_l_5"><input type="file" name="img_url_en" id="img_url_en" size="50" maxlength="200"/>  
+    只允许上传的文件格式为：jpg, gif, png 大小不超过2mb</td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">信息图片：</td>
+  <td class="border tr_out p_l_5"><input type="file" name="img_url_jp" id="img_url_jp" size="50" maxlength="200"/>  
+    只允许上传的文件格式为：jpg, gif, png 大小不超过2mb</td>
+  </tr>
+  
+   <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">信息内容：</td>
+    <td class="border tr_out p_l_5"><textarea name="content_cn" style="width:100%;height:200px;visibility:hidden;"></textarea></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">信息内容：</td>
+    <td class="border tr_out p_l_5"><textarea name="content_en" style="width:100%;height:200px;visibility:hidden;"></textarea></td>
+  </tr> 
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">信息内容：</td>
+    <td class="border tr_out p_l_5"><textarea name="content_jp" style="width:100%;height:200px;visibility:hidden;"></textarea></td>
+  </tr> 
+  <tr>
+    <td align="center" class="border tr_over b">添加时间：</td>
+  <td class="border tr_out p_l_5"><input name="add_time" type="text" class="en calendar" id="add_time" value="{$add_time}" size="25" maxlength="30" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/></td>
+  </tr>
+</table>
+</form>
+{elseif $smarty.get.action eq 'edit'}
+<form action="?action=update" method="post" enctype="multipart/form-data" name="myform">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">修 改 信 息</td>
+  </tr> 
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+  <tr>
+    <td height="35" align="center" valign="bottom" class="bg_bai">
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24">
+        <div class="title_list">
+          <ul>
+          {foreach from=$language_array item="li" name="langli"}
+            <li {if $smarty.foreach.langli.first}class="over"{/if}>{$li}</li>
+          {/foreach}
+          </ul>
+        </div>
+        </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+<tr>
+    <td align="center" class="border tr_over b" width='18%'>信息排序：</td>
+	<td class="border tr_out p_l_5">
+    <select name="order_id" id="order_id" class="en">
+    {html_options options=$order_id selected=$count}
+    </select>
+    </td>
+  </tr> 
+  <tr>
+    <td width="15%" align="center" class="border tr_over b">所属栏目：</td>
+    <td width="85%" class="border tr_out p_l_5">
+    <select name="class_id" id="class_id" class="en">
+    {html_options options=$class_array selected=$rows.class_id}
+    </select>
+      </td>
+  </tr> 
+    <tr>
+    <td width="15%" align="center" class="border tr_over b">所属客户：</td>
+  <td width="85%" class="border tr_out p_l_5">
+    <select name="kid" id="class_id" class="en">
+    <option value="">请选择客户信息</option>
+    {foreach $kehu as $k=>$v}
+    <option value="{$v.id}" {if $rows.kid eq $v.id}selected{/if}>{$v.title}</option>
+    {/foreach}
+    </select>
+    </td>
+  </tr>
+  <tr class="content_list list_0">
+    <td width="15%" align="center" class="border tr_over b">信息名称：</td>
+  <td class="border tr_out p_l_5"><input name="title_cn" type="text" class="w_100" id="title_cn"  value="{$rows.title_cn}" maxlength="200"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">信息名称：</td>
+  <td class="border tr_out p_l_5"><input name="title_en" type="text" class="w_100" id="title_en"  value="{$rows.title_en}" maxlength="200"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">信息名称：</td>
+  <td class="border tr_out p_l_5"><input name="title_jp" type="text" class="w_100" id="title_jp"  value="{$rows.title_jp}" maxlength="200"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">积分价格：</td>
+  <td class="border tr_out p_l_5"><input name="price" type="text" class="w_100" id="title_jp" value="{$rows.price}" maxlength="10" {literal}onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"{/literal} /></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">开启时间：</td>
+  <td class="border tr_out p_l_5"><input name="start_time" type="text" size="20" value="{$rows.start_time}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal}/> - 
+  <input name="end_time" type="text" size="20" value="{$rows.end_time}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal}/></td></td></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">信息图片：</td>
+  <td class="border tr_out p_l_5"><input type="file" name="img_url_cn" id="img_url_cn" size="50" maxlength="200"/> {if $rows.img_url_cn!=''}<span id="pic_view">
+    <a href="../{$rows.img_url_cn}" target="_blank"><img src="images/icons_view.gif" width="11" height="10" class="pic_view" title="预览图片" alt="../{$rows.img_url_cn}"/></a>&nbsp;
+    </span>
+    {/if} 
+    只允许上传的文件格式为：jpg, gif, png 大小不超过2mb</td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">信息图片：</td>
+  <td class="border tr_out p_l_5"><input type="file" name="img_url_en" id="img_url_en" size="50" maxlength="200"/> {if $rows.img_url_en!=''}<span id="pic_view">
+    <img src="images/icons_view.gif" width="11" height="10" class="pic_view" title="预览图片" alt="../{$rows.img_url_en}"/>&nbsp;
+    </span>
+    {/if} 
+    只允许上传的文件格式为：jpg, gif, png 最佳尺寸[宽*高]：163px * 130px</td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">信息图片：</td>
+  <td class="border tr_out p_l_5"><input type="file" name="img_url_jp" id="img_url_jp" size="50" maxlength="200"/> {if $rows.img_url_en!=''}<span id="pic_view">
+    <img src="images/icons_view.gif" width="11" height="10" class="pic_view" title="预览图片" alt="../{$rows.img_url_jp}"/>&nbsp;
+    </span>
+    {/if} 
+    只允许上传的文件格式为：jpg, gif, png 最佳尺寸[宽*高]：163px * 130px</td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">信息内容：</td>
+    <td class="border tr_out p_l_5"><textarea name="content_cn" style="width:100%;height:200px;visibility:hidden;">{$rows.content_cn}
+    </textarea></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">信息内容：</td>
+    <td class="border tr_out p_l_5"><textarea name="content_en" style="width:100%;height:200px;visibility:hidden;">{$rows.content_en}
+    </textarea></td>
+  </tr>   
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">信息内容：</td>
+    <td class="border tr_out p_l_5"><textarea name="content_jp" style="width:100%;height:200px;visibility:hidden;">{$rows.content_jp}
+    </textarea></td>
+  </tr> 
+  <tr>
+    <td align="center" class="border tr_over b">添加时间：</td>
+  <td class="border tr_out p_l_5"><input name="add_time" type="text" class="en calendar" id="add_time" value="{$rows.add_time}" size="25" maxlength="30" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name="id" type="hidden" id="id" value="{$rows.id}"/>
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/></td>
+  </tr>
+</table>
+</form>
+{else}
+<form method="get" action="{$CurrentPageName}">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">信息查询：</td>
+    <td width="45%" align="left" class="border tr_out p_l_5">
+    <input name="keyword" id="keyword" type="text" value="{$smarty.get.keyword}" size="30" maxlength="30"/>
+    <select name="searchclass">
+  <option value="1"{if $smarty.get.searchclass==1} selected{/if}>名称</option>
+  </select> 
+    <input type="submit" value=" 查 询 " class="lostfocus btn"/></td>
+    <td width="40%" align="left" class="border tr_out p_l_10">
+      <select onchange="location='?class_id='+this.value" class="W300 en">
+        <option value="">跳转栏目至…</option>
+        {html_options options=$class_array selected=$smarty.get.class_id}
+      </select>
+    </td>
+  </tr>
+</table>
+</form>
+<form name="myform" method="post" action="?action=operation">
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td width="5%" class="title_b bg_bai b">选中</td>
+    <td width="5%" class="title_b bg_bai b">编号</td>
+    <td class="title_b bg_bai b">信息名称</td> 
+    <td width="10%" class="title_b bg_bai b">价格</td>
+    <td width="20%" class="title_b bg_bai b">开启时间</td>
+    <td width="5%" class="title_b bg_bai b">排序</td> 
+    <td width="20%" class="title_b bg_bai b">{$order_class_id}</td>
+    <td width="10%" class="title_b bg_bai b">{$order_time}</td>
+    <td width="6%" class="title_b bg_bai b">操作</td>
+  </tr>
+{foreach from=$list_array item="list" name="zw"}
+  <tr class="tr_out tr_check">
+    <td align="center" class="border"><input name='id[]' type='checkbox' value='{$list.id}' class="input_check"/></td>
+    <td align="center" class="border">{$smarty.foreach.zw.iteration}</td>
+    <td align="center" class="border p_l_5"><a href="?action=edit&class_id={$list.class_id}&id={$list.id}">
+    {$list.title_cn}
+    {if $list.title_en neq ''} - {$list.title_en}{/if}
+    {if $list.title_jp neq ''} - {$list.title_jp}{/if}
+    </a>
+    </td>
+     <td align="center" class="border">{$list.price}</td>
+     <td align="center" class="border">{$list.start_time} - {$list.end_time}</td>
+     
+     <td align="center" class="border">
+      {if $list.id != $order_up_id}
+        {if $smarty.get.order!='' || $smarty.get.sort!=''}
+      <img src="images/order_up_no.gif" title="当前不能操作"/>
+        {else}
+      <a href="?action=up_order&class_id={$smarty.get.class_id}&id={$list.id}"><img src="images/order_up.gif" title="向上移动"/></a>
+        {/if}
+      {else}
+      <img src="images/order_no.gif"/>
+      {/if}
+      
+      {if $list.id != $order_down_id}
+        {if $smarty.get.order!='' || $smarty.get.sort!=''}
+        <img src="images/order_down_no.gif" title="当前不能操作"/>
+        {else}
+        <a href="?action=down_order&class_id={$smarty.get.class_id}&id={$list.id}"><img src="images/order_down.gif" title="向下移动"/></a>
+        {/if}
+      {else}
+        <img src="images/order_no.gif"/>
+      {/if}
+    </td>
+     
+    <td align="center" class="border">{$list.class_name}</td>
+    <td align="center" class="border">{$list.add_time}</td>
+    <td align="center" class="border">
+    <a href="?action=edit&class_id={$list.class_id}&id={$list.id}"><img src="images/edit.gif" alt="编辑"/></a>
+    <a href="?action=delete&id={$list.id}" class="del"><img src="images/delete.gif" alt="删除"/></a>
+    </td>
+  </tr>
+{foreachelse}
+  <tr class="tr_out"><td height="28" colspan="8" align="center">无数据！</td></tr>
+{/foreach}
+  <tr class="bg_bai">
+    <td height="30" align="center"><input name="checkboxall" type="checkbox" id="checkboxall" class="input_check"/></td>
+    <td height="30" colspan="8" align="left" class="p_l_10"><label for="checkboxall">全选/取消全选</label>
+      <select name="operationclass" id="operationclass">
+        <option value="">请选择批量操作选项</option>
+        <option value="batch_delete">-- 批量执行删除 --</option>
+      </select> 
+      <input type="submit" name="开始执行" class="lostfocus confirm btn" value=" 开始执行 "/></td>
+    </tr>
+  <tr class="bg_bai">
+    <td height="30" colspan="10" align="right">{include file='admin/qc_page.html'}</td>
+  </tr>
+</table>
+</form>
+{/if}
+</body>
+</html>

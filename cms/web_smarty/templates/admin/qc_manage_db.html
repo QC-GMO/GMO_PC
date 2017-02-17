@@ -1,0 +1,142 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>中国企业港——网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="js/function.js"></script>
+<script language="javascript" type="text/javascript" src="js/calendar.js"></script>
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border m_b_3">
+  <tr align="center">
+    <td colspan="2" class="title_b bg_bai">数 据 信 息 管 理</td>
+  </tr>
+  <tr>
+    <td width="16%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="84%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}">信息管理首页</a> |
+    <a href="{$CurrentPageName}?action=backup">数据库备份</a> |
+    <a href="{$CurrentPageName}?action=restore">数据库恢复</a> |</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border m_b_3">
+<tr><td colspan="2" class="title_b bg_bai p_l_5" style="height:20px; line-height:20px; font-weight:normal;">数据库引擎：{$db_Engine}&nbsp;&nbsp;&nbsp;&nbsp;数据库大小：{$db_size}&nbsp;MB</td></tr>
+</table>
+{if $smarty.get.action eq 'backup'}
+<form action="?action=submit_backup" method="post" enctype="multipart/form-data" name="myform" onSubmit="return check_add_news()">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">数 据 库 备 份</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+<tr>
+<td>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="border m_b_3">
+<tr><td colspan="2" class="title_b bg_bai red" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;★&nbsp;数据库备份注意事项：&nbsp;★</td></tr>
+<tr><td colspan="2" class="title_b bg_bai" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;&nbsp;&nbsp;&nbsp;[1]：对于较大的数据表（1.5MB以上），强烈建议使用分卷备份</td></tr>
+<tr><td colspan="2" class="title_b bg_bai" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;&nbsp;&nbsp;&nbsp;[2]：只有选择备份到服务器，才能使用分卷备份功能</td></tr>
+<tr><td colspan="2" class="title_b bg_bai" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;&nbsp;&nbsp;&nbsp;[3]：服务器数据库备份目录为：{$data_backup_dir}</td></tr>
+</table>
+<table width="100%" border="0" align="left" cellpadding="0" cellspacing="1" class="border" style="margin-top:2px;">
+    <tr>
+        <td width="16%" align="left" class="border tr_over b p_l_5">备份方式：</td>
+        <td width="84%" class="border tr_out p_l_5"><input type="radio" name="backup_way" id="backup_all" value="0" class="input_check">&nbsp;<label for="backup_all">整站数据库备份</label>&nbsp;&nbsp;<input type="radio" name="backup_way" id="backup_table" value="1" class="input_check">&nbsp;<label for="backup_table">备份单张表数据</label>&nbsp;<select name="backup_table"><option value="">选择数据表</option>{foreach from=$list_array item=list}<option value="{$list.Name}">{$list.Name}</option>{foreachelse}数据库暂无表{/foreach}</select></td>
+      </tr>
+      <tr>
+        <td align="left" class="border tr_over b p_l_5">分卷备份：</td>
+        <td class="border tr_out p_l_5"><input name="backup_volume" type="checkbox" id="backup_volume" class="input_check" value="1" />&nbsp;<label for="backup_volume">使用分卷备份</label>&nbsp;&nbsp;<input name="volume_size" type="text" size="5" />&ensp;KB</td>
+      </tr>
+      <tr>
+        <td align="left" class="border tr_over b p_l_5">备份存储：</td>
+        <td class="border tr_out p_l_5"><input type="radio" name="backup_location" id="backup_server" value="0" class="input_check">&nbsp;<label for="backup_server">备份到服务器</label>&nbsp;&nbsp;<input type="radio" name="backup_location" id="backup_location" value="1" class="input_check">&nbsp;<label for="backup_location">备份到本地</label></td>
+      </tr>
+</table>
+</td>
+</tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus" id="submit_button" onmouseover='this.className="getfocus";' onmouseout='this.className="lostfocus";' value=" 提交 ">
+      <input name=" 取消 " type="button" class="lostfocus" id="cancel_button" onClick="history.back();" onmouseover='this.className="getfocus";' onmouseout='this.className="lostfocus";' value=" 取消 "></td>
+  </tr>
+</table>
+</form>
+{elseif $smarty.get.action eq 'restore'}
+<form action="?action=submit_backup" method="post" enctype="multipart/form-data" name="myform" onSubmit="return check_add_news()">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">数 据 库 恢 复</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+<tr>
+<td>
+<table width="100%" border="0" cellpadding="2" cellspacing="0" class="border m_b_3">
+<tr><td colspan="2" class="title_b bg_bai red" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;★&nbsp;数据库恢复注意事项：&nbsp;★</td></tr>
+<tr><td colspan="2" class="title_b bg_bai" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;&nbsp;&nbsp;&nbsp;[1]：本功能在恢复备份数据的同时，将全部覆盖原有数据，请确定是否需要恢复，以免造成数据损失</td></tr>
+<tr><td colspan="2" class="title_b bg_bai" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;&nbsp;&nbsp;&nbsp;[2]：从本地恢复数据需要服务器支持文件上传并保证数据尺寸小于允许上传的上限，否则只能使用从服务器恢复</td></tr>
+<tr><td colspan="2" class="title_b bg_bai" style="height:20px; line-height:20px; font-weight:normal;">&nbsp;&nbsp;&nbsp;&nbsp;[3]：如果您使用了分卷备份，只需手工导入文件卷1，其他数据文件会由系统自动导入</td></tr>
+</table>
+<table width="100%" border="0" align="left" cellpadding="0" cellspacing="1" class="border" style="margin-top:2px;">
+    <tr>
+        <td width="16%" align="left" class="border tr_over b p_l_5">服务器恢复：</td>
+        <td width="84%" class="border tr_out p_l_5"><select name="backup_table"><option value="">请选择备份信息</option>{foreach from=$list_array item=list}<option value="{$list.Name}">{$list.Name}</option>{foreachelse}数据库暂无表{/foreach}</select></td>
+      </tr>
+      <tr>
+        <td align="left" class="border tr_over b p_l_5">从本地恢复：</td>
+        <td class="border tr_out p_l_5"><input name="file" type="file" size="40" /></td>
+      </tr>
+</table>
+</td>
+</tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus" id="submit_button" onmouseover='this.className="getfocus";' onmouseout='this.className="lostfocus";' value=" 提交 ">
+      <input name=" 取消 " type="button" class="lostfocus" id="cancel_button" onClick="history.back();" onmouseover='this.className="getfocus";' onmouseout='this.className="lostfocus";' value=" 取消 "></td>
+  </tr>
+</table>
+</form>
+{else}
+<form name="myform" method="post" action="?action=operation">
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td width="5%" class="title_b bg_bai b">选中</td>
+    <td width="35%" class="title_b bg_bai b">数据库表</td>
+    <td width="10%" class="title_b bg_bai b">记录条数</td>
+    <td width="10%" class="title_b bg_bai b">大小</td>
+    <td width="10%" class="title_b bg_bai b">字符集</td>
+    <td width="20%" class="title_b bg_bai b">时间</td>
+    <td width="10%" class="title_b bg_bai b">操作</td>
+  </tr>
+{foreach from=$list_array item="list" name="zw"}
+  <tr id="TR_{$list.Name}" onMouseOver="Color_Over('{$list.Name}',1)" onMouseOut="Color_Out('{$list.Name}',1)" class="tr_out">
+    <td align="center" class="border"><input name='table[]' id="Color_ID_{$list.Name}" type='checkbox' onClick="UnSelectAll('','');" value='{$list.Name}' class="input_check"></td>
+    <td align="left p_l_5" class="border">{$list.Name}{if $list.Comment neq ''} | {$list.Comment}{/if}</td>
+    <td align="center" class="border">{$list.Rows}</td>
+    <td align="center" class="border"><span class="red">{$list.Data_length}</span> MB</td>
+    <td align="center" class="border">{$list.Collation}</td>
+    <td align="center" class="border">{$list.Create_time}</td>
+    <td align="center" class="border"><a href="?action=optimize&table={$list.Name}"><img src="images/optimization.png" alt="优化" /></a>&nbsp;&nbsp;<a href="?action=repair&table={$list.Name}" onClick="return Confirm('确定要这样操作吗？建议仅在数据表遭到破坏的时候才使用该功能！')"><img src="images/repair.png" alt="修复" /></a>{if $Session.Admin.Flag>0}&nbsp;&nbsp;<img src="images/delete_no.gif" border="0" alt="不可删除">{else}&nbsp;&nbsp;<a href="?action=drop&table={$list.Name}" onClick="return Confirm('确定要删除该表吗？删除之后将不可恢复！')"><img src="images/delete.gif" border="0" alt="删除"></a>{/if}</td>
+  </tr>
+{foreachelse}
+  <tr class="tr_out"><td height="28" colspan="7" align="center">无数据！</td></tr>
+{/foreach}
+  <tr class="bg_bai">
+    <td height="30" align="center"><input name="checkboxall" type="checkbox" id="checkboxall" onClick="CheckAll(this.form)" value="checkbox" class="input_check"></td>
+    <td height="30" colspan="7" align="left" class="p_l_10"><label for="checkboxall">全选/取消全选</label>
+      <select name="operationclass">
+        <option value="">请选择批量操作选项</option>
+        <option value="batch_optimize">-- 批量执行优化 --</option>
+        <option value="batch_repair">-- 批量执行修复 --</option>
+      </select>
+      <input type="submit" name="开始执行" class="lostfocus" onmouseover='this.className="getfocus";' onmouseout='this.className="lostfocus";' value="开始执行" onClick="return Confirm('确定要这样操作吗？')"></td>
+    </tr>
+  <tr class="bg_bai">
+    <td height="30" colspan="7" align="right">{include file='admin/qc_page.html'}</td>
+  </tr>
+</table>
+</form>
+{/if}
+</body>
+</html>

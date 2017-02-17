@@ -1,0 +1,680 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+
+  <link rel="stylesheet" href="../web_kindeditor/themes/default/default.css" />
+  <link rel="stylesheet" href="../web_kindeditor/plugins/code/prettify.css" />
+  <script charset="utf-8" src="../web_kindeditor/kindeditor.js"></script>
+  <script charset="utf-8" src="../web_kindeditor/lang/zh_CN.js"></script>
+  <script charset="utf-8" src="../web_kindeditor/plugins/code/prettify.js"></script>
+{literal}
+<script>
+  KindEditor.ready(function(K) {
+      var editor1 = K.create('textarea[name="class_content_cn"]', {
+        cssPath : '../web_kindeditor/plugins/code/prettify.css',
+        uploadJson : '../web_kindeditor/php/upload_json.php',
+        fileManagerJson : '../web_kindeditor/php/file_manager_json.php',
+        allowFileManager : true,
+        afterCreate : function() {
+          var self = this;
+          K.ctrl(document, 13, function() {
+            self.sync();
+            K('form[name=example]')[0].submit();
+          });
+          K.ctrl(self.edit.doc, 13, function() {
+            self.sync();
+            K('form[name=example]')[0].submit();
+          });
+        }
+      });
+      
+      var editor1 = K.create('textarea[name="class_content_en"]', {
+          cssPath : '../web_kindeditor/plugins/code/prettify.css',
+          uploadJson : '../web_kindeditor/php/upload_json.php',
+          fileManagerJson : '../web_kindeditor/php/file_manager_json.php',
+          allowFileManager : true,
+          afterCreate : function() {
+            var self = this;
+            K.ctrl(document, 13, function() {
+              self.sync();
+              K('form[name=example]')[0].submit();
+            });
+            K.ctrl(self.edit.doc, 13, function() {
+              self.sync();
+              K('form[name=example]')[0].submit();
+            });
+          }
+        });
+      
+      var editor1 = K.create('textarea[name="class_content_jp"]', {
+          cssPath : '../web_kindeditor/plugins/code/prettify.css',
+          uploadJson : '../web_kindeditor/php/upload_json.php',
+          fileManagerJson : '../web_kindeditor/php/file_manager_json.php',
+          allowFileManager : true,
+          afterCreate : function() {
+            var self = this;
+            K.ctrl(document, 13, function() {
+              self.sync();
+              K('form[name=example]')[0].submit();
+            });
+            K.ctrl(self.edit.doc, 13, function() {
+              self.sync();
+              K('form[name=example]')[0].submit();
+            });
+          }
+        });
+      prettyPrint();
+    });
+</script>
+{/literal}
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="2" class="title_b bg_bai">网 站 栏 目 管 理</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="85%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}">栏目管理首页</a> |
+    {if $Session.Admin.Flag==0}
+    <a href="{$CurrentPageName}?action=add_banner">添加一级栏目</a> |
+    {/if}
+    <a href="{$CurrentPageName}?action=order">一级栏目排序</a> |
+    <a href="{$CurrentPageName}?action=order_other">多级栏目排序</a> |
+    <a href="{$CurrentPageName}?action=update_key_des">全栏目更新关键字和描述</a> |
+    </td>
+  </tr>
+</table>
+<!-- 添加start -->
+{if $smarty.get.action eq 'add_banner'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai">添 加 栏 目</td>
+  </tr>
+</table> 
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+  <tr>
+    <td height="35" align="center" valign="bottom" class="bg_bai">
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24">
+        <div class="title_list">
+          <ul>
+          {foreach from=$language_array item="li" name="langli"}
+            <li {if $smarty.foreach.langli.first}class="over"{/if}>{$li}</li>
+          {/foreach}
+          </ul>
+        </div>
+        </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>  
+<!-- banner添加 -->
+<form action="?action=insert" method="post" enctype="multipart/form-data">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr>
+    <td width="15%" align="center" class="border tr_over b"><font color="green">上级栏目</font>：</td>
+	<td width="85%" class="border tr_out p_l_5">
+    <select name="class_parent_id" class="en">
+    <option value="0">无(作为一级分类)</option>
+    {foreach from=$menu_array item="zw" name="zw"}
+    <option value="{$zw.class_id}"{if $zw.class_id eq $smarty.get.class_id} selected{/if}>{$zw.class_icon}{$zw.class_name_cn}</option>
+    {/foreach}
+    </select>
+    </td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_cn" type="text" size="50" maxlength="100" id="class_name_cn"/></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_en" type="text" size="50" maxlength="100" id="class_name_en"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_jp" type="text" size="50" maxlength="100" id="class_name_jp"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b"><font color="green">栏目路径</font>：</td>
+    <td class="border tr_out p_l_5"><input name="class_url" type="text" size="50" maxlength="100" id="class_url"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan='3'> 
+	<input type="file" name="img_url_cn" id="img_url_cn" size="50" maxlength="200"/>  
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+	</td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan='3'> 
+	<input type="file" name="img_url_en" id="img_url_en" size="50" maxlength="200"/>  
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+	</td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan='3'> 
+	<input type="file" name="img_url_jp" id="img_url_jp" size="50" maxlength="200"/>  
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+	</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b"><font color="green">栏目属性</font>：</td>
+	<td class="border tr_out p_l_5">
+    <select name="menu_module" id="menu_module">
+    {html_options options=$menu_module_array}
+    </select>
+    <label><input type="radio" name="is_show" class="input_check" value="1" checked/>显示</label>
+    <label><input type="radio" name="is_show" class="input_check" value="0"/>隐藏</label>
+    </td>
+  </tr>   
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_cn" style="width:100%;height:200px;visibility:hidden;">
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_cn" type="text" class="w_100" id="class_title_cn" value="{$web.Web_SiteTitle_cn}" maxlength="100"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_cn" type="text" maxlength="200" id="class_keywords_cn" value="{$web.Web_Keywords_cn}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_cn" rows="3" id="class_description_cn" class="w_100">{$web.Web_Description_cn}</textarea></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_en" style="width:100%;height:200px;visibility:hidden;">
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_en" type="text" maxlength="100" id="class_title_en" value="{$web.Web_SiteTitle_en}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_en" type="text" maxlength="200" id="class_keywords_en" value="{$web.Web_Keywords_en}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_en" rows="3" id="class_description_en" class="w_100">{$web.Web_Description_en}</textarea></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_jp" style="width:100%;height:200px;visibility:hidden;">
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_jp" type="text" maxlength="100" id="class_title_jp" value="{$web.Web_SiteTitle_jp}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_jp" type="text" maxlength="200" id="class_keywords_jp" value="{$web.Web_Keywords_jp}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_jp" rows="3" id="class_description_jp" class="w_100">{$web.Web_Description_jp}</textarea></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>
+    </td>
+  </tr>
+</table>
+</form>
+<!-- banner添加end -->
+
+<!-- 添加start -->
+{elseif $smarty.get.action eq 'add'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai">添 加 栏 目</td>
+  </tr>
+</table> 
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+  <tr>
+    <td height="35" align="center" valign="bottom" class="bg_bai">
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24">
+        <div class="title_list">
+          <ul>
+          {foreach from=$language_array item="li" name="langli"}
+            <li {if $smarty.foreach.langli.first}class="over"{/if}>{$li}</li>
+          {/foreach}
+          </ul>
+        </div>
+        </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table> 
+<form action="?action=insert" method="post" enctype="multipart/form-data">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr>
+    <td width="15%" align="center" class="border tr_over b"><font color="green">上级栏目</font>：</td>
+	<td width="85%" class="border tr_out p_l_5">
+	{if $rows.class_name_cn neq ''}
+	<input type="hidden" value="{$rows.class_id}" name="class_parent_id"/>
+	{$rows.class_name_cn}   
+	{else}
+	<input type="hidden" value="0" name="class_parent_id"/>
+	<font color="#9933FF">一级栏目</font>
+	{/if}
+    </td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_cn" type="text" size="50" maxlength="100" id="class_name_cn"/></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_en" type="text" size="50" maxlength="100" id="class_name_en"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_jp" type="text" size="50" maxlength="100" id="class_name_jp"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b"><font color="green">栏目路径</font>：</td>
+    <td class="border tr_out p_l_5"><input name="class_url" type="text" size="50" maxlength="100" id="class_url" value="{$rows.class_url}"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan='3'> 
+	<input type="file" name="img_url_cn" id="img_url_cn" size="50" maxlength="200"/>  
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+	</td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan='3'> 
+	<input type="file" name="img_url_en" id="img_url_en" size="50" maxlength="200"/>  
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+	</td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan='3'> 
+	<input type="file" name="img_url_jp" id="img_url_jp" size="50" maxlength="200"/>  
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+	</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b"><font color="green">栏目属性</font>：</td>
+	<td class="border tr_out p_l_5">
+    <select name="menu_module" id="menu_module">
+    {html_options options=$menu_module_array}
+    </select>
+    <label><input type="radio" name="is_show" class="input_check" value="1" checked/>显示</label>
+    <label><input type="radio" name="is_show" class="input_check" value="0"/>隐藏</label>
+    </td>
+  </tr>   
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_cn" style="width:100%;height:200px;visibility:hidden;">
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_cn" type="text" class="w_100" id="class_title_cn" value="{$web.Web_SiteTitle_cn}" maxlength="100"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_cn" type="text" maxlength="200" id="class_keywords_cn" value="{$web.Web_Keywords_cn}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_cn" rows="3" id="class_description_cn" class="w_100">{$web.Web_Description_cn}</textarea></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_en" style="width:100%;height:200px;visibility:hidden;">
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_en" type="text" maxlength="100" id="class_title_en" value="{$web.Web_SiteTitle_en}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_en" type="text" maxlength="200" id="class_keywords_en" value="{$web.Web_Keywords_en}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_en" rows="3" id="class_description_en" class="w_100">{$web.Web_Description_en}</textarea></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_jp" style="width:100%;height:200px;visibility:hidden;">
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_jp" type="text" maxlength="100" id="class_title_jp" value="{$web.Web_SiteTitle_jp}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_jp" type="text" maxlength="200" id="class_keywords_jp" value="{$web.Web_Keywords_jp}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_jp" rows="3" id="class_description_jp" class="w_100">{$web.Web_Description_jp}</textarea></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>
+    </td>
+  </tr>
+</table>
+</form>
+<!-- 添加end -->
+<!-- 编辑start -->
+{elseif $smarty.get.action eq 'edit'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai">修 改 栏 目</td>
+  </tr>
+</table> 
+<table width="100%" border="0" cellpadding="0" cellspacing="0" >
+  <tr>
+    <td height="35" align="center" valign="bottom" class="bg_bai">
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24">
+        <div class="title_list">
+          <ul>
+          {foreach from=$language_array item="li" name="langli"}
+            <li {if $smarty.foreach.langli.first}class="over"{/if}>{$li}</li>
+          {/foreach}
+          </ul>
+        </div>
+        </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table> 
+<form action="?action=update&class_id={$rows.class_id}" method="post" enctype="multipart/form-data">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr>
+    <td width="15%" align="center" class="border tr_over b"><font color="green">上级栏目</font>：</td>
+	<td width="85%" class="border tr_out p_l_5">
+	{if $rows.class_parent_name neq ''} 
+	{$rows.class_parent_name}   
+	{else}
+	<input type="hidden" value="0" name="class_parent_id"/>
+	<font color="#9933FF">一级栏目</font>
+	{/if}
+    </td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_cn" type="text" size="50" maxlength="100" id="class_name_cn" value="{$rows.class_name_cn}"/></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_en" type="text" size="50" maxlength="100" id="class_name_en" value="{$rows.class_name_en}"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name_jp" type="text" size="50" maxlength="100" id="class_name_jp" value="{$rows.class_name_jp}"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b"><font color="green">栏目路径</font>：</td>
+    <td class="border tr_out p_l_5"><input name="class_url" type="text" id="class_url" value="{$rows.class_url}" size="50" maxlength="100"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan="3">
+    <input type="file" name="img_url_cn" id="img_url_cn" size="50"  maxlength="200"/>&nbsp;
+    {if $rows.img_url_cn!=''}
+    <span id="pic_view_cn">
+    <img src="images/icons_view.gif" width="11" height="10" class="pic_view" title="预览图片" alt="../{$rows.img_url_cn}"/>&nbsp;
+    <img src="images/icons_del.gif" width="10" height="10" class="pic_del" title="删除图片" onclick="pic_del('web_class','img_url_cn','{$rows.class_id}','pic_view_cn',true)"/>
+    </span>
+    {/if}
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+    </td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan="3">
+    <input type="file" name="img_url_en" id="img_url_en" size="50"  maxlength="200"/>&nbsp;
+    {if $rows.img_url_en!=''}
+    <span id="pic_view_en">
+    <img src="images/icons_view.gif" width="11" height="10" class="pic_view" title="预览图片" alt="../{$rows.img_url_en}"/>&nbsp;
+    <img src="images/icons_del.gif" width="10" height="10" class="pic_del" title="删除图片" onclick="pic_del('web_class','img_url_en','{$rows.class_id}','pic_view_en',true)"/>
+    </span>
+    {/if}
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+    </td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目图片：</td>
+	<td class="border tr_out p_l_5" colspan="3">
+    <input type="file" name="img_url_jp" id="img_url_jp" size="50"  maxlength="200"/>&nbsp;
+    {if $rows.img_url_jp!=''}
+    <span id="pic_view_jp">
+    <img src="images/icons_view.gif" width="11" height="10" class="pic_view" title="预览图片" alt="../{$rows.img_url_jp}"/>&nbsp;
+    <img src="images/icons_del.gif" width="10" height="10" class="pic_del" title="删除图片" onclick="pic_del('web_class','img_url_jp','{$rows.class_id}','pic_view_jp',true)"/>
+    </span>
+    {/if}
+	只允许上传的文件格式为：jpg, gif, png 建议尺寸[宽*高]：* px
+    </td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b"><font color="green">栏目属性</font>：</td>
+	<td class="border tr_out p_l_5">
+    <select name="menu_module" id="menu_module">
+    {html_options options=$menu_module_array selected=$rows.menu_module}
+    </select>
+    <label><input type="radio" name="is_show" class="input_check" value="1"{if $rows.is_show=='1'} checked{/if}/>是</label>
+    <label><input type="radio" name="is_show" class="input_check" value="0"{if $rows.is_show=='0'} checked{/if}/>否</label>
+    </td>
+  </tr>  
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_cn" style="width:100%;height:200px;visibility:hidden;">{$rows.class_content_cn}
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_cn" type="text" class="w_100" id="class_title_cn" value="{$rows.class_title_cn}" maxlength="100"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_cn" type="text" maxlength="200" id="class_keywords_cn" value="{$rows.class_keywords_cn}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_0">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_cn" rows="3" id="class_description_cn" class="w_100">{$rows.class_description_cn}</textarea></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_en" style="width:100%;height:200px;visibility:hidden;">{$rows.class_content_en}
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_en" type="text" maxlength="100" id="class_title_en" value="{$rows.class_title_en}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_en" type="text" maxlength="200" id="class_keywords_en" value="{$rows.class_keywords_en}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_en" rows="3" id="class_description_en" class="w_100">{$rows.class_description_en}</textarea></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">栏目介绍</td>
+	<td class="border tr_out p_l_5"><textarea name="class_content_jp" style="width:100%;height:200px;visibility:hidden;">{$rows.class_content_jp}
+    </textarea></td>
+  </tr> 
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 标　题</td>
+	<td class="border tr_out p_l_5"><input name="class_title_jp" type="text" maxlength="100" id="class_title_jp" value="{$rows.class_title_jp}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 关键字</td>
+	<td class="border tr_out p_l_5"><input name="class_keywords_jp" type="text" maxlength="200" id="class_keywords_jp" value="{$rows.class_keywords_jp}" class="w_100"/></td>
+  </tr>
+  <tr class="content_list list_2">
+    <td align="center" class="border tr_over b">SEO - 描　述</td>
+	<td class="border tr_out p_l_5"><textarea name="class_description_jp" rows="3" id="class_description_jp" class="w_100">{$rows.class_description_jp}</textarea></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/></td>
+  </tr>
+</table>
+</form>
+<!-- 编辑end -->
+<!-- 一级排序start -->
+{elseif $smarty.get.action eq 'order'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="4">一 级 栏 目 排 序</td>
+  </tr>
+  {foreach from=$menu_array item="menu" name="menu"}
+  <tr class="tr_out tr_check">
+    <td width="50%" align="left" class="border b">
+    <img src='images/tree_folder4.gif' valign='abvmiddle'/>
+    {$menu.class_name_cn}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $smarty.foreach.menu.iteration ne 1}<img src='images/order_up.gif' border='0' title='向上移动'/> <a href='?action=up_order&class_id={$menu.class_id}'>向上移动</a>{else}&nbsp;{/if}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $smarty.foreach.menu.iteration ne $menu.class_count}<a href='?action=down_order&class_id={$menu.class_id}'>向下移动</a> <img src='images/order_down.gif' border='0' title='向下移动'/>{else}&nbsp;{/if}
+    
+    </td>
+  </tr>
+    {foreachelse}
+  <tr class="tr_out"><td colspan="3" align="center" class="border">暂无栏目分类信息！</td></tr>
+    {/foreach}
+</table>
+<!-- 一级排序end -->
+<!-- 多级排序start -->
+{elseif $smarty.get.action eq 'order_other'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="4">多 级 栏 目 排 序</td>
+  </tr>
+  {foreach from=$menu_array item="menu" name="menu"}
+  <tr class="tr_out tr_check">
+    <td width="50%" align="left" class="border">
+    {$menu.class_line}<img src='images/tree_folder{if $menu.class_child>0}4{else}3{/if}.gif'/>
+    {if $menu.class_depth==0}<b>{/if}
+    {$menu.class_name_cn}
+    {if $menu.class_depth==0}</b>{/if}
+    {if $menu.class_child>0}[{$menu.class_child}]{/if}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $menu.class_parent_id>0}
+    	{if $menu.class_up>0}
+    		<img src="images/order_up.gif" border="0" title="向上移动"/>
+   			<a href="?action=up_order_other&class_id={$menu.class_id}">向上移动</a>
+    	{else}
+    		&nbsp;
+    	{/if}
+    {else}
+    	&nbsp;
+    {/if}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $menu.class_parent_id>0}
+    	{if $menu.class_down>0}
+    		<img src="images/order_down.gif" border="0" title="向下移动"/>
+   			<a href="?action=down_order_other&class_id={$menu.class_id}">向下移动</a>
+    	{else}
+    		&nbsp;
+    	{/if}
+    {else}
+    	&nbsp;
+    {/if}
+    </td>
+  </tr>
+    {foreachelse}
+  <tr class="tr_out"><td colspan="3" align="center" class="border">暂无栏目分类信息！</td></tr>
+    {/foreach}
+</table>
+<!-- 多级排序end -->
+<!-- 默认start -->
+{else}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border Fixed">
+  <tr align="center">
+    <td width="40%" class="title_b bg_bai b">栏目名称</td> 
+    <td width="30%" class="title_b bg_bai b">栏目地址</td>
+    <td width="5%" class="title_b bg_bai b">状态</td>
+    <td width="10%" class="title_b bg_bai b">属性</td>
+    <td width="15%" class="title_b bg_bai b">操作</td>
+  </tr>
+	{foreach from=$menu_array item="menu"}
+  <tr class="tr_out tr_check">
+    <td align="left" valign="middle" class="border">
+    <div class="StrValue" style="width:99%"> 
+    {$menu.class_line}
+    <img src='images/tree_folder{if $menu.class_child>0}4{else}3{/if}.gif'/>
+    {if $menu.class_depth==0}<b>{/if}
+    <a href="?action=edit&class_id={$menu.class_id}">{$menu.class_name_cn}
+    {if $menu.class_name_en!=''}- {$menu.class_name_en}{/if}
+    {if $menu.class_name_jp!=''}- {$menu.class_name_jp}{/if}
+    </a> 
+    {if $menu.class_depth==0}</b>{/if}
+    {if $menu.class_child>0}[{$menu.class_child}]{/if}
+    {if $menu.img_url_cn!=''}<img src="images/icons_view.gif" width="11" height="10" class="pic_view" title="预览图片" alt="../{$menu.img_url_cn}"/>{/if}
+    </div>
+    </td>
+	<td align="left" class="border">{$menu.class_url}</td>
+	<td align="center" class="border">{if $menu.is_show==1}显示{else}<span class="f_CCCCCC">隐藏</span>{/if}</td>
+	<td align="center" class="border">{$menu_module_array[$menu.menu_module]}</td>
+	<td align="center" class="border">
+	<!-- 不能添加四级栏目 --> 
+   
+    <a href="?action=add&class_id={$menu.class_id}"><img src="images/add.gif" border="0" alt="添加"/></a> &nbsp;&nbsp;
+   
+    <a href="?action=edit&class_id={$menu.class_id}"><img src="images/edit.gif" border="0" alt="编辑"/></a>&nbsp;&nbsp;
+    {if $Session.Admin.Flag==0 || $menu.class_depth>0}
+    <a href="?action=delete&class_id={$menu.class_id}" class="del"><img src="images/delete.gif" border="0" alt="删除"/></a>
+    {else}
+    <img src="images/delete_no.gif" border="0" alt=""/>
+    {/if}
+    </td>
+  </tr>
+    {foreachelse}
+  <tr class="tr_out"><td colspan="6" align="center" class="border">暂无栏目分类信息！</td></tr>
+    {/foreach}
+</table>
+<!-- 默认end -->
+{/if}
+</body>
+</html>

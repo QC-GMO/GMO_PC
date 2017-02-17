@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+<script type="text/javascript" src="js/aben.js"></script>
+</head>
+<body class="body_bg_3">
+
+
+<form action="?action=update" method="post" enctype="multipart/form-data" name="myform">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="4">修 改 信 息</td>
+  </tr>  
+ 
+  <tr>
+    <td align="center" class="border tr_over b">会员号：</td>
+	<td class="border tr_out p_l_5" colspan="3"><input name="user_code" type="text" id="user_code" value="{$member_data.user_code}" maxlength="20" readonly="readonly"/></td>
+  </tr>  
+  <tr>
+    <td align="center" class="border tr_over b">姓名：</td>
+	<td class="border tr_out p_l_5" colspan="3"><input name="name" type="text" id="name" value="{$member_data.name}" maxlength="20" readonly="readonly"/></td>
+  </tr> 
+   <tr>
+    <td align="center" class="border tr_over b">归属届：</td>
+	<td class="border tr_out p_l_5" colspan="3">{foreach $webclass_array as $li}
+	<p><input  type="checkbox" class="" value="{$li.class_id}" id="class_id{$li.class_id}" maxlength="2" name="class_id[]" {if $member_data.typeof neq ''}{if $li.class_id|in_array:$member_data.typeof}checked{/if}{/if}/>{$li.class_name_cn} 有效期<input name="start_time{$li.class_id}" type="text" class="en calendar"  value="{$member_data['start_time'][$li.class_id]}" size="25" maxlength="30" id="start_time{$li.class_id}" onmousedown="show_c(this);"/>~<input name="end_time{$li.class_id}" type="text" class="en calendar"  value="{$member_data['end_time'][$li.class_id]}" size="25" maxlength="30" id="end_time{$li.class_id}" onmousedown="show_c(this);"/></p>
+	{/foreach}
+	</td>
+  </tr>
+  
+  <tr>
+    <td colspan="4" align="center" class="tr_out"> 
+      <input name="id" type="hidden" id="id" value="{$id}"/>
+      
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>
+   </td>
+  </tr>
+</table>
+</form>
+
+</body>
+</html>
+<script>
+function show_c(obj){
+	var today=new Date(); //日历
+	var h=checkTime(today.getHours());
+	var m=checkTime(today.getMinutes());
+	var s=checkTime(today.getSeconds());	
+	var dateConfig = {
+		yearRange: '-10:+10', //'-20:+20'前后20年   
+		//yearRange: '1950:' + new Date().getFullYear(), //'-20:+20'前后20年
+		//dayNamesMin: ['日','一','二','三','四','五','六'],
+		//changeFirstDay: false,        //这个参数干什么的呢，星期一是日历的第一个，不可以改动的
+		//numberOfMonths: 2,            //显示二个月，默认一个月   
+		monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'],
+		dateFormat: 'yy-mm-dd '+h+":"+m+":"+s,  //日期格式，自己设置 
+		buttonImage: 'images/calendar.gif',  //按钮的图片路径，自己设置 
+		buttonText: '选择时间',
+		buttonImageOnly: true, //显示图片的地方有一个突出部分，这个就是隐藏那玩意的
+		showOn: 'focus', //触发条件，both表示点击文本域和图片按钮都生效
+		changeYear: true,
+		changeMonth: true
+	};
+
+	var id = $(obj).attr('id');
+	if ($('#'+id).length>0){
+		$('#'+id).datepicker(dateConfig);
+	}
+}
+</script>

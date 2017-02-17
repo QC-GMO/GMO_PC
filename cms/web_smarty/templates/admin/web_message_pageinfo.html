@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+<script type="text/javascript" src="js/aben.js"></script>
+<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+	<link rel="stylesheet" href="../web_kindeditor/themes/default/default.css" />
+		<script charset="utf-8" src="../web_kindeditor/kindeditor-min.js"></script>
+		<script charset="utf-8" src="../web_kindeditor/lang/zh_CN.js"></script>
+{literal}
+<script>
+var editor_cn;
+KindEditor.ready(function(K) {
+	editor_cn = K.create('textarea[name="reply_content"]', {
+		allowFileManager : true
+	});
+})
+</script>
+{/literal}		
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="3" class="title_b bg_bai">留言信息管理</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="85%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}?language={$language}">信息管理首页</a> 
+  </tr>
+</table>
+{if $smarty.get.action eq 'add'}
+{elseif $smarty.get.action eq 'edit'}
+<form action="?action=update" method="post" enctype="multipart/form-data" name="myform">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="4">查 看 咨 询</td>
+  </tr>  
+  <tr>
+    <td width="15%" align="center" class="border tr_over b">姓名：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.name}</td>
+  </tr> 
+  <tr>
+    <td align="center" class="border tr_over b">email：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.email}</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">回复状态：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{if $rows.reply_title neq ''}已回复{else}未回复{/if}</td>
+  </tr>
+  {if $rows.reply_title neq ''}
+   <tr>
+    <td align="center" class="border tr_over b">回复者：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.replier}</td>
+  </tr>
+  {/if}
+  <tr>
+    <td align="center" class="border tr_over b">使用系统：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.sys}</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">使用浏览器：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.browser}</td>
+  </tr>
+  {if $rows.type eq 2}
+  <tr>
+    <td align="center" class="border tr_over b">问卷名：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.subject}</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">问卷号：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.number}</td>
+  </tr>
+  {/if}
+  <tr>
+    <td align="center" class="border tr_over b">留言内容：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.message}</td>
+  </tr>    
+  <tr>
+    <td align="center" class="border tr_over b">添加时间：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.add_time}</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">回复标题：</td>
+	<td class="border tr_out p_l_5" colspan="3">
+	<input name='reply_title' class="w_100" value="{if $rows.reply_title neq ''}{$rows.reply_title}{else}【Z.com Research (最网e调查)】关于您咨询的答复
+	{/if}" /></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">回复内容：</td>
+	<td class="border tr_out p_l_5" colspan="3"><textarea name="reply_content" style="width:100%;height:200px;visibility:hidden;">
+	{if $rows.reply_content neq ''}{$rows.reply_content}{else}
+	【Z.com Research (最网e调查)】<br>
+　　              	我说、我做，世界更精彩！<br>
+　　　　      最网e调查是一个在线调研和活动的会员社区。由这里，我们将大家的心声传递给海内外企业。<br>
+                     加入我们，踏上你的精彩之旅→:https://www.zcom.asia<br><br>
+		
+		亲爱的{$rows.name}<br/><br/>
+
+		感谢您一直以来对我们的支持！<br/>
+		这里是技慕驿动市场调查（上海）有限公司在线调研及活动的会员平台—— Z.com Research (最网e调查)。<br/><br/><br/>
+		
+		
+		　　Free text<br/><br/><br/>
+		
+		
+		若仍有疑问请随时与我们联系。<br/>
+		感谢您对于最网e调查的大力支持！<br/><br/>
+		
+		※本邮件是送信专用邮件<br>
+                     我们无法回复本邮件，敬请谅解。<br>
+                     <hr />
+                       ■Z.com Research (最网e调查)■　 
+                    <hr />
+                    ◆公司介绍： http://www.gmo-e-lab.com <br>
+                    ◆会员网站： https://www.zcom.asia <br>
+                    ◆使用方法：https://www.zcom.asia/pc/about.php?cid=26 <br>
+                    ◆回答问卷须知：https://www.zcom.asia/pc/about.php?cid=28 <br>
+                    ◆常见问题：https://www.zcom.asia/pc/issue.php?cid=27 <br>
+                    ◆会员条款： https://www.zcom.asia/pc/about.php?cid=31 <br>
+                    ◆积分兑换方法： https://www.zcom.asia/pc/about.php?cid=35 <br><br>
+                     
+                     运营：技慕驿动市场调查（上海）有限公司<br>
+                     地址：中国上海市西藏中路336号华旭国际大厦2207室<br>
+	        URL ：http://www.gmo-e-lab.com<br>
+	        <hr />
+	        (C) Since 2016 GMO E-Lab Marketing Research (Shanghai) CO, LTD.
+	{/if}</textarea></td>
+  </tr>
+  <tr>
+    <td colspan="4" align="center" class="tr_out"> 
+      <input name="id" type="hidden" id="id" value="{$rows.id}"/>
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>
+   </td>
+  </tr>
+</table>
+</form>
+
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border" style="margin:40px 0 50px 0;">
+<tr align="center">
+    <td class="title_b bg_bai" colspan="8">查 看 历 史 咨 询</td>
+  </tr>  
+  <tr align="center">
+    <td width="5%" class="title_b bg_bai b">编号</td>
+    <td width="10%" class="title_b bg_bai b">用户名</td>
+    <td width="10%" class="title_b bg_bai b">邮箱</td>
+    <td width="10%" class="title_b bg_bai b">类型</td>
+    <td width="10%" class="title_b bg_bai b">是否回复</td>
+    <td width="10%" class="title_b bg_bai b">查看</td>
+    <td width="10%" class="title_b bg_bai b">{$order_time}</td>
+  </tr>
+{foreach from=$list_array item="list" name="zw"}
+  <tr class="tr_out tr_check">
+    <td align="center" class="border">{$smarty.foreach.zw.iteration}</td>
+    <td align="center" class="border p_l_5">{$list.name}
+    </td>
+    <td align="center" class="border">{$list.email}</td>
+	<td align="center" class="border">{if $list.type eq 1}普通咨询{else}问卷咨询{/if}</td>
+	<td align="center" class="border">{if $list.reply_title neq ''}已回复{else}未回复{/if}</td>
+    <td align="center" class="border"><a href="?action=edit&id={$list.id}"><u>查看详情</u></a></td>
+    <td align="center" class="border">{$list.add_time}</td>
+  </tr>
+{foreachelse}
+  <tr class="tr_out"><td height="28" colspan="9" align="center">无数据！</td></tr>
+{/foreach}
+  <tr class="bg_bai">
+    <td height="30" colspan="9" align="right">{include file='admin/qc_page.html'}</td>
+  </tr>
+</table>
+{else}
+<form method="get" action="{$CurrentPageName}">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">邮箱查询：</td>
+    <td width="85%" align="left" class="border tr_out p_l_5">
+	    <input name="email" type="text" value="{$smarty.get.email}" size="20" maxlength="30" placeholder="请输入邮箱"/>
+	    &nbsp;&nbsp;
+	    <input name="id" type="text" value="{$smarty.get.id}" size="20" maxlength="30" placeholder="请输入ID"/>
+	    &nbsp;&nbsp;
+	    <input name="number" type="text" value="{$smarty.get.number}" size="20" maxlength="30" placeholder="请输入问卷号"/>
+	    &nbsp;&nbsp;
+        <input type="text" name="start" placeholder="请输入开始时间" value="{$smarty.get.start}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal} /> -
+        <input type="text" name="end" placeholder="请输入结束时间" value="{$smarty.get.end}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal} />
+        &nbsp;&nbsp;
+    <input type="submit" value=" 查 询 " class="lostfocus btn"/></td>
+  </tr>
+</table>
+</form>
+<form name="myform" method="post" action="?action=operation">
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td width="5%" class="title_b bg_bai b">选中</td>
+    <td width="5%" class="title_b bg_bai b">编号</td>
+    <td width="7%" class="title_b bg_bai b">用户名</td>
+    <td width="10%" class="title_b bg_bai b">邮箱</td>
+    <td width="8%" class="title_b bg_bai b">类型</td>
+    <td width="5%" class="title_b bg_bai b">问卷号</td>
+    <td width="10%" class="title_b bg_bai b">是否回复</td>
+    <td width="10%" class="title_b bg_bai b">查看</td>
+    <td width="10%" class="title_b bg_bai b">{$order_time}</td>
+  </tr>
+{foreach from=$list_array item="list" name="zw"}
+  <tr class="tr_out tr_check">
+    <td align="center" class="border"><input name='id[]' type='checkbox' value='{$list.id}' class="input_check"/></td>
+    <td align="center" class="border">{$list.id}</td>
+    <td align="center" class="border p_l_5">{$list.name}
+    </td>
+    <td align="center" class="border">{$list.email}</td>
+	<td align="center" class="border">{if $list.type eq 1}普通咨询{else}问卷咨询{/if}</td>
+	<td align="center" class="border">{if $list.number eq ''}-{else}{$list.number}{/if}</td>
+	<td align="center" class="border">{if $list.reply_title neq ''}已回复{else}未回复{/if}</td>
+    <td align="center" class="border"><a href="?action=edit&id={$list.id}"><u>查看详情</u></a></td>
+    <td align="center" class="border">{$list.add_time}</td>
+  </tr>
+{foreachelse}
+  <tr class="tr_out"><td height="28" colspan="9" align="center">无数据！</td></tr>
+{/foreach}
+<!--   <tr class="bg_bai">
+    <td height="30" align="center"><input name="checkboxall" type="checkbox" id="checkboxall" class="input_check"/></td>
+    <td height="30" colspan="8" align="left" class="p_l_10"><label for="checkboxall">全选/取消全选</label>
+      <select name="operationclass" id="operationclass">
+        <option value="">请选择批量操作选项</option>
+        <option value="batch_delete">-- 批量执行删除 --</option>
+      </select> 
+      <input type="submit" name="开始执行" class="lostfocus confirm btn" value=" 开始执行 "/></td>
+    </tr> -->
+    <tr class="bg_bai">
+    	<td height="30" align="center" colspan="3">
+    	<a id="down" href="?action=down&number={$smarty.get.number}&id={$smarty.get.id}&email={$smarty.get.email}&start={$smarty.get.start}&end={$smarty.get.end}">
+      		<input type="button" class="lostfocus btn" value="下载本次结果信息 "/></a></td>
+    	<td height="30" align="center" colspan="8"></td>
+    </tr>
+  <tr class="bg_bai">
+    <td height="30" colspan="9" align="right">{include file='admin/qc_page.html'}</td>
+  </tr>
+</table>
+</form>
+{/if}
+</body>
+</html>

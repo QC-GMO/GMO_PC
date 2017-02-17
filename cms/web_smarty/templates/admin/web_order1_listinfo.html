@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+<script type="text/javascript" src="js/aben.js"></script>
+<script type="text/javascript" src="js/My97DatePicker/WdatePicker.js"></script>
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border m_b_10">
+  <tr align="center">
+    <td colspan="3" class="title_b bg_bai">积分申请统计管理</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="45%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}?language={$language}">信息管理首页</a> <!-- |
+    <a href="{$CurrentPageName}?action=add&language={$language}">添加信息</a> | 
+    <a href="{$CurrentPageName}?action=reorder&language={$language}">重新排序</a> |  -->
+    </td>
+    <td width="40%" align="left" class="border tr_out p_l_10">
+    <select onchange="location='?language='+this.value" class="W300 en hidden">
+    {html_options options=$language_array selected=$language}
+    </select>
+    </td>
+  </tr>
+</table>
+{if $smarty.get.action eq 'add'}
+{elseif $smarty.get.action eq 'edit'}
+<form action="?action=update" method="post" enctype="multipart/form-data" name="myform">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="4">查 看 信 息</td>
+  </tr>  
+  <tr>
+    <td width="20%" align="center" class="border tr_over b">订单号：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.number}</td>
+  </tr>
+  <tr>
+    <td width="20%" align="center" class="border tr_over b">下单账户ID：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.uid}</td>
+  </tr> 
+  <tr>
+    <td width="20%" align="center" class="border tr_over b">申请类型：</td>
+	<td class="border tr_out p_l_5" colspan="3">{if $rows.type eq 1}兑换商品{elseif $rows.type eq 2}兑换现金（支付宝）{elseif $rows.type eq 3}兑换现金（微信）{/if}</td>
+  </tr>
+  {if $rows.type eq 1}  
+  <tr>
+    <td align="center" class="border tr_over b">收件人：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.name}</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">收件电话：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.mobile}</td>
+  </tr> 
+   <tr>
+    <td align="center" class="border tr_over b">收件地址：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.address}</td>
+  </tr> 
+<tr>
+    <td align="center" class="border tr_over b">购买商品：</td>
+	<td class="border tr_out p_l_5" colspan='3'>
+	<table width="50%" border="0" cellpadding="2" cellspacing="1" class="border">
+	<tr>
+	<td width="40%" align="center">商品名称</td>
+	<td width="15%" align="center">数量</td>
+	<td width="15%" align="center">单价</td>
+	</tr>
+	{foreach $item_list as $key=>$val}
+	<tr><td align="center">{$val.title}</td><td align="center">{$val.num}</td><td align="center">{$val.total}</td></tr>
+	{/foreach}
+	</table>
+	</td>
+  </tr> 
+  {/if}
+<tr>
+    <td align="center" class="border tr_over b">积分总价格：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.total}</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">兑换状态：</td>
+	<td class="border tr_out p_l_5" colspan='3'>{$rows.status_txt}
+	</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">下单时间：</td>
+	<td class="border tr_out p_l_5" colspan="3">{$rows.add_time}</td>
+  </tr>
+  <!-- <tr>
+    <td colspan="4" align="center" class="tr_out"> 
+      <input name="id" type="hidden" id="id" value="{$rows.id}"/>
+      <input name=" 提交 " type="submit" class="lostfocus confirm btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>
+   </td>
+  </tr> -->
+</table>
+</form>
+{else}
+<form method="get" action="{$CurrentPageName}">
+    <table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+        <tr>
+            <td width="15%" align="center" class="border tr_out b">信息查询：</td>
+            <td width="85%" align="left" class="border tr_out p_l_5">
+            <input name="number" type="text" value="{$smarty.get.number}" size="20" maxlength="30" placeholder="请输入订单号"/>
+                &nbsp;&nbsp;
+            	<select name="type" style="width:134px" >
+            		<option value="" {if $smarty.get.type==''} selected{/if}>请选择申请类型</option>
+            		<option value="1" {if $smarty.get.type==1} selected{/if}>兑换商品</option>
+                    <option value="2" {if $smarty.get.type==2} selected{/if}>兑换现金（支付宝）</option>
+					<option value="3" {if $smarty.get.type==3} selected{/if}>兑换现金（微信）</option>
+                </select>
+                &nbsp;&nbsp;
+                <select name="status" style="width:134px" >
+            		<option value="" {if $smarty.get.status==''} selected{/if}>请选择状态</option>
+            		<option value="1" {if $smarty.get.status==1} selected{/if}>申请中</option>
+                    <option value="2" {if $smarty.get.status==2} selected{/if}>取消申请</option>
+					<option value="3" {if $smarty.get.status==3} selected{/if}>审核通过未下载</option>
+					<option value="4" {if $smarty.get.status==4} selected{/if}>审核通过已下载</option>
+					<option value="5" {if $smarty.get.status==5} selected{/if}>审核未通过</option>
+					<option value="6" {if $smarty.get.status==6} selected{/if}>大麦城发货</option>
+					<option value="7" {if $smarty.get.status==7} selected{/if}>退回</option>
+					<option value="8" {if $smarty.get.status==8} selected{/if}>申请后注销</option>
+                </select>
+                &nbsp;&nbsp;
+                <input type="text" name="start" placeholder="请输入下单开始时间" value="{$smarty.get.start}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal} /> -
+                <input type="text" name="end" placeholder="请输入下单结束时间" value="{$smarty.get.end}" {literal}onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"{/literal} />
+                &nbsp;&nbsp;
+                <input type="submit" value=" 查 询 " class="lostfocus btn"/></td>
+        </tr>
+    </table>
+</form>
+<form name="myform" method="post" action="?action=operation">
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td width="5%" class="title_b bg_bai b">编号</td>
+    <td width="15%" class="title_b bg_bai b">订单号</td>
+    <td width="15%" class="title_b bg_bai b">订单类型</td>
+    <td width="10%" class="title_b bg_bai b">下单账户ID</td>
+    <td width="15%" class="title_b bg_bai b">订单状态</td>
+    <td width="10%" class="title_b bg_bai b">查看</td>
+    <td width="15%" class="title_b bg_bai b">{$order_time}</td>
+    
+  </tr>
+{foreach from=$list_array item="list" name="zw"}
+  <tr class="tr_out tr_check">
+    <td align="center" class="border">{$smarty.foreach.zw.iteration}</td>
+    <td align="center" class="border p_l_5"><a href="?action=edit&id={$list.id}">{$list.number}</a>
+    </td>
+    <td align="center" class="border">{if $list.type eq 1}兑换商品{elseif $list.type eq 2}兑换现金（支付宝）{elseif $list.type eq 3}兑换现金（微信）{/if}</td>
+    <td align="center" class="border">{$list.uid}</td>
+    <td align="center" class="border">
+   	{$list.status_txt}
+    </td>
+    <td align="center" class="border"><a href="?action=edit&id={$list.id}">查看详情</a></td>
+    <td align="center" class="border">{$list.add_time}</td>
+  </tr>
+{foreachelse}
+  <tr class="tr_out"><td height="28" colspan="9" align="center">无数据！</td></tr>
+{/foreach}
+	{if $list_array neq ''}
+  	<tr class="bg_bai">
+    <td align="center" height="30" colspan="3" class="p_l_10">
+      <a id="down" href="?action=down&number={$smarty.get.number}&type={$smarty.get.type}&status={$smarty.get.status}&start={$smarty.get.start}&end={$smarty.get.end}">
+      		<input type="button" class="lostfocus btn" value="下载本次结果信息 "/></a>
+      <td height="30" align="center" colspan="4"></td>
+    </tr>
+    {/if}
+  <tr class="bg_bai">
+    <td height="30" colspan="9" align="right">{include file='admin/qc_page.html'}</td>
+  </tr>
+</table>
+</form>
+{/if}
+</body>
+</html>

@@ -1,0 +1,12 @@
+﻿{if $records gt 0}
+<div class="pages">
+  <ul>
+    <li><a href="{$url}page=1">首页</a></li>
+    {if $page neq '1'}<li><a href="{$url}page={$page-1}"><FONT>上一页</FONT></a></li>{/if}
+    {foreach from=$page_array item='counter'}<li{if $page==$counter} class="absolutepage"{/if}><a href="{$url}page={$counter}">{$counter}</a></li>{/foreach}
+    {if $page neq $page_count}<li><a href="{$url}page={$page+1}"><FONT>下一页</FONT></a>{/if}
+    <li><a href="{$url}page={$page_count}">尾页</a></li>
+    <li class="pagesone">总计：<span class="f_Page">{$records}</span> 条记录，当前页：<span class="f_Page">{$page}</span>/{$page_count}</li>
+  </ul>
+</div>
+{/if}

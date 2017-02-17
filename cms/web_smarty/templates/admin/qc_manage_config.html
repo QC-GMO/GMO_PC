@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="2" class="title_b bg_bai">网 站 信 息 设 置</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="35" align="center" valign="bottom" class="bg_bai">
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="24">
+        <div class="title_list">
+          <ul>
+            <li class="over">网站信息</li>
+            <li>网站选项</li>
+            <li>安全选项</li>
+            <li>邮件设置</li>
+          </ul>
+        </div>
+        </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+<form name="myform" action="?action=update" method="post">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+{if $Session.Admin.Flag==0}
+  <tr class="content_list list_0"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">系统授权：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_SiteName" type="text" class="w_100" id="Web_SiteName" value="{$web.Web_SiteName}" size="30" maxlength="30"/></td>
+  </tr>
+  <tr class="content_list list_0"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">系统版本：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_Version" type="text" class="w_100" id="Web_Version" value="{$web.Web_Version}" size="30" maxlength="30"/></td>
+  </tr>
+  <tr class="hidden"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">管理路径：</span><br/>
+    路径中只可以包含英文字母、数字和下划线。</td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_Admin_Path" type="text" class="w_100" id="Web_Admin_Path" value="{$web.Web_Admin_Path}" size="30" maxlength="30"/></td>
+  </tr>
+{/if}
+  <tr class="content_list list_0"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">网站的标题：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_SiteTitle_cn" type="text" class="w_100" id="Web_SiteTitle_cn" value="{$web.Web_SiteTitle_cn}" size="30"/></td>
+  </tr>
+  <tr class="content_list list_0"> 
+    <td width="30%" align="left" valign="top" class="border tr_over"><span class="b">网站关键字：</span><br/>
+    多个关键字之间请用英文输入法中的“,” (逗号)隔开。</td>
+    <td width="70%" class="border tr_out p_l_5"><textarea name="Web_Keywords_cn" rows="3" class="w_100" id="Web_Keywords_cn">{$web.Web_Keywords_cn}</textarea></td>
+  </tr>  
+  <tr class="content_list list_0"> 
+    <td width="30%" align="left" valign="top" class="border tr_over"><span class="b">网站的描述：</span><br/>
+    对网站进行文字描述。</td>
+    <td width="70%" class="border tr_out p_l_5"><textarea name="Web_Description_cn" rows="3" class="w_100" id="Web_Description_cn">{$web.Web_Description_cn}</textarea></td>
+  </tr>
+  <tr class="hidden"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">网站的标题：(英文)</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_SiteTitle_en" type="text" class="w_100" id="Web_SiteTitle_en" value="{$web.Web_SiteTitle_en}" size="30"/></td>
+  </tr>
+  <tr class="hidden"> 
+    <td width="30%" align="left" valign="top" class="border tr_over"><span class="b">网站关键字：(英文)</span><br/>
+    多个关键字之间请用英文输入法中的"," (逗号)隔开。</td>
+    <td width="70%" class="border tr_out p_l_5"><textarea name="Web_Keywords_en" rows="3" class="w_100" id="Web_Keywords_en">{$web.Web_Keywords_en}</textarea></td>
+  </tr>  
+  <tr class="hidden"> 
+    <td width="30%" align="left" valign="top" class="border tr_over"><span class="b">网站的描述：(英文)</span><br/>
+    对网站进行文字描述。</td>
+    <td width="70%" class="border tr_out p_l_5"><textarea name="Web_Description_en" rows="3" class="w_100" id="Web_Description_en">{$web.Web_Description_en}</textarea></td>
+  </tr>
+  <tr class="hidden"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">网站的标题：(繁体)</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_SiteTitle_jp" type="text" class="w_100" id="Web_SiteTitle_jp" value="{$web.Web_SiteTitle_jp}" size="30"/></td>
+  </tr>
+  <tr class="hidden"> 
+    <td width="30%" align="left" valign="top" class="border tr_over"><span class="b">网站关键字：(繁体)</span><br/>
+    多个关键字之间请用英文输入法中的"," (逗号)隔开。</td>
+    <td width="70%" class="border tr_out p_l_5"><textarea name="Web_Keywords_jp" rows="3" class="w_100" id="Web_Keywords_jp">{$web.Web_Keywords_jp}</textarea></td>
+  </tr>  
+  <tr class="hidden"> 
+    <td width="30%" align="left" valign="top" class="border tr_over"><span class="b">网站的描述：(繁体)</span><br/>
+    对网站进行文字描述。</td>
+    <td width="70%" class="border tr_out p_l_5"><textarea name="Web_Description_jp" rows="3" class="w_100" id="Web_Description_jp">{$web.Web_Description_jp}</textarea></td>
+  </tr>
+
+
+  <tr class="content_list list_1"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">ICP 备案号：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_ICP" type="text" id="Web_ICP" value="{$web.Web_ICP}" size="30" maxlength="30"/></td>
+  </tr>
+  <tr class="hidden"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">文件上传模式：</span><br/>
+    网站正式开通后请改为&quot;站点模式&quot;，测试期间请改为&quot;虚拟目录&quot;。该选项将会影响文件上传的目录，请谨慎操作。</td>
+    <td width="70%" class="border tr_out p_l_5">
+    <label><input name="Web_Root_S" type="radio" class="input_check" onclick="{literal}if(this.checked){Web_Root.className='hidden'}else{Web_Root.className=''};Web_Root.value=this.value{/literal}" value="/"{if $web.Web_Root=='/'} checked{/if} />站点模式</label>
+    <label><input name="Web_Root_S" type="radio" class="input_check" onclick="{literal}if(this.checked){Web_Root.className=''}else{Web_Root.className='hidden'};Web_Root.value=this.value{/literal}" value="{$web.Web_Root}"{if $web.Web_Root!='/'} checked{/if} />虚拟目录</label>　
+    <input name="Web_Root" type="text" id="Web_Root" value="{$web.Web_Root}" size="18" class="{if $web.Web_Root=='/'}hidden{/if}" />
+    </td>
+  </tr>
+  <tr class="content_list list_1">
+    <td width="30%" align="left" class="border tr_over"><span class="b">信息每页显示：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_PageSize" type="text" id="Web_PageSize" value="{$web.Web_PageSize}" size="3" maxlength="3"/> 条</td>
+  </tr> 
+  <tr class="hidden">
+    <td width="30%" align="left" class="border tr_over"><span class="b">网站当前状态：</span></td>
+    <td width="70%" class="border tr_out p_l_5">
+      <label><input name="Web_Close" type="radio" class="input_check" value="open"{if $web.Web_Close=='open'} checked{/if} />正常</label>
+      <label><input name="Web_Close" type="radio" class="input_check" value="close"{if $web.Web_Close=='close'} checked{/if} />关闭</label>
+      </td>
+  </tr>
+  <tr class="hidden"> 
+    <td width="30%" align="left" valign="top" class="border tr_over"><span class="b">网站关闭原因：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><textarea name="Web_Reason" rows="3" class="w_100" id="Web_Reason">{$web.Web_Reason}</textarea></td>
+  </tr>
+<tr class="content_list list_1">
+    <td width="30%" align="left" class="border tr_over"><span class="b">cms服务器访问域名：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_admin_url" type="text" value="{$web.Web_admin_url}" size="100" maxlength="100"/></td>
+  </tr>
+  <tr class="content_list list_1">
+    <td width="30%" align="left" class="border tr_over"><span class="b">电话/传真：</span></td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Company_Fax" type="text" value="{$web.Company_Fax}" size="100" maxlength="100"/></td>
+  </tr>
+
+
+  <tr class="content_list list_2">
+    <td width="30%" align="left" class="border tr_over"><span class="b">验证码模式：</span><br/>
+    设置后台登陆时验证码的格式。</td>
+    <td width="70%" class="border tr_out p_l_5">
+    <label><input name="Web_CheckCode" type="radio" class="input_check" value="ALL"{if $web.Web_CheckCode=='ALL'} checked{/if} />字母+数字</label>
+    <label><input name="Web_CheckCode" type="radio" class="input_check" value="CHAR"{if $web.Web_CheckCode=='CHAR'} checked{/if} />全字母</label>
+    <label><input name="Web_CheckCode" type="radio" class="input_check" value="NUMBER"{if $web.Web_CheckCode=='NUMBER'} checked{/if} />全数字</label>
+    </td>
+  </tr>
+  <tr class="content_list list_2"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">登陆次数限制：</span><br/>在30分钟内允许连续输入密码错误的次数。</td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_Login_Num" type="text" id="Web_Login_Num" value="{$web.Web_Login_Num}" size="3" maxlength="3"/> 次</td>
+  </tr>
+  <tr class="content_list list_2"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">Session会话自定义名称：</span><br/>
+    用于增强后台安全性，修改后需要重新登陆系统。</td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_SessionName" type="text" id="Web_SessionName" value="{$web.Web_SessionName}" size="8" maxlength="8"/></td>
+  </tr>
+
+
+
+  <tr class="content_list list_3"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">SMTP服务器地址：</span><br/>用来发送邮件的SMTP服务器。</td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_Smtp" type="text" id="Web_Smtp" value="{$web.Web_Smtp}" size="30" maxlength="100"/></td>
+  </tr>
+  <tr class="content_list list_3"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">SMTP登录用户名：</span><br/>当你的服务器需要SMTP身份验证时还需设置此参数。</td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_Smtp_ID" type="text" id="Web_Smtp_ID" value="{$web.Web_Smtp_ID}" size="30" maxlength="100"/></td>
+  </tr>
+  <tr class="content_list list_3"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">SMTP登录密码：</span><br/>当你的服务器需要SMTP身份验证时还需设置此参数。</td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_Smtp_PW" type="password" id="Web_Smtp_PW" value="{$web.Web_Smtp_PW}" size="30" maxlength="100"/></td>
+  </tr> 
+  <tr class="hidden"> 
+    <td width="30%" align="left" class="border tr_over"><span class="b">邮件接收：</span><br/>接受客户留言信息。</td>
+    <td width="70%" class="border tr_out p_l_5"><input name="Web_Email_In" type="text" id="Web_Email_In" value="{$web.Web_Email_In}" size="30" maxlength="100"/></td>
+  </tr>
+
+
+
+  <tr> 
+    <td colspan="2" align="center" class="border tr_out">
+    <input name=" 保存 " type="submit" class="lostfocus btn" id=" 保存 " value=" 保存 "/>
+    <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+    </td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

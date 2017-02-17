@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+<script type="text/javascript" src="js/aben.js"></script>
+</head>
+<body class="body_bg_3">
+
+					<form method="post" id="mamber_message_form" action="mamber_message.php" enctype="multipart/form-data">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td height="42" align="right"><span class="color_red"> </span><strong class="color_333">头像：</strong></td>
+		<td><img src="{if $list.img_url neq ''}../{$list.img_url}{else}../images/member_photo.gif{/if}" width="125" height="175" class="m_img_border" /></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">* </span><strong class="color_333">账号：</strong></td>
+		<td><input type="text" class="member_input01" name="username" id="username" value="{$list.username}"/></td>
+	</tr>
+	<tr>
+		<td width="19%" height="42" align="right"><span class="color_red">*</span> <strong class="color_333">会员号：</strong></td>
+		<td width="81%">
+			<input type="text" class="member_input01" name="user_code" value="{if $list.user_code}{$list.user_code}{else}{$member_code}{/if}" readonly="readonly" /></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">* </span><strong class="color_333">姓名：</strong></td>
+		<td><input type="text" class="member_input01" name="name" id="name" value="{$list.name}"/></td>
+	</tr>
+	 <tr>
+    <td align="right">归属届：</td>
+	<td >{foreach $webclass_array as $li}
+	<p><input  type="checkbox" class="" value="{$li.class_id}" id="class_id{$li.class_id}" maxlength="2" name="class_id[]" {if $list.typeof neq ''}{if $li.class_id|in_array:$list.typeof}checked{/if}{/if}/>{$li.class_name_cn} 有效期<input name="start_time{$li.class_id}" type="text" class="en calendar"  value="{$list['start_time'][$li.class_id]}" size="25" maxlength="30" id="start_time{$li.class_id}" />~<input name="end_time{$li.class_id}" type="text" class="en calendar"  value="{$list['end_time'][$li.class_id]}" size="25" maxlength="30" id="end_time{$li.class_id}" /></p>
+	{/foreach}
+	</td>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span><strong class="color_333"> 性别：</strong></td>
+		<td> <input name="sex" type="radio" value="1" {if $list.sex eq '1'}checked="checked"{/if} /> 男　　<input type="radio" name="sex" value="0" {if $list.sex eq '0'}checked="checked"{/if}/> 女</td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span><strong class="color_333"> 出生年月：</strong></td>
+		<td><select name="year" id='year' class="member_select02">
+		<option value="">请选择</option>
+		{foreach $year as $li}
+		<option value="{$li}" {if $list.birthday.0 eq $li}selected{/if}>{$li}</option>
+		{/foreach}
+		</select><input type="hidden" id="now_month" value="{$list.birthday.1}"/><select name="month" id="month" class="member_select02">
+		<option value="">请选择</option>
+		<option value="01">01</option>
+		<option value="02">02</option>
+		<option value="03">03</option>
+		<option value="04">04</option>
+		<option value="05">05</option>
+		<option value="06">06</option>
+		<option value="07">07</option>
+		<option value="08">08</option>
+		<option value="09">09</option>
+		<option value="10">10</option>
+		<option value="11">11</option>
+		<option value="12">12</option>
+		
+			</select></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">身份证号：</strong></td>
+		<td><input type="text" class="member_input01" name="code" id="code" value="{$list.code}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">民族：</strong></td>
+		<td><input type="text" class="member_input01" name="nation" id="nation" value="{$list.nation}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">政治面貌：</strong></td>
+		<td><input type="text" class="member_input01" name="politics" id="politics" value="{$list.politics}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">邮箱：</strong></td>
+		<td><input type="text" class="member_input01" name="email" id="email" value="{$list.email}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><strong class="color_333">工作电话：</strong></td>
+		<td><input type="text" class="member_input01" name="tel" id="tel" value="{$list.tel}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><strong class="color_333">移动电话：</strong></td>
+		<td><input type="text" class="member_input01" name="mobile" id="mobile" value="{$list.mobile}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">学历：</strong></td>
+		<td><input type="text" class="member_input01" name="education" id="education" value="{$list.education}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">学位：</strong></td>
+		<td><input type="text" class="member_input01" name="degree" id="degree" value="{$list.degree}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">国籍：</strong></td>
+		<td><select name="country" id="country" class="member_select01">
+			<option value="">请选择</option>
+			{foreach $country_config as $k=>$v}
+			<option value="{$k}" {if $list.country eq $k}selected{/if}>{$v}</option>
+			{/foreach}
+		</select></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span><strong class="color_333">是否在职：</strong></td>
+		<td> <input name="job_status" type="radio" value="1" {if $list.job_status eq '1'}checked="checked"{/if}/> 是　　<input type="radio" name="job_status" value="0" {if $list.job_status eq '0'}checked="checked"{/if}/> 否</td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">工作学习单位：</strong></td>
+		<td><input type="text" class="member_input01" name="company" id="company" value="{$list.company}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><strong class="color_333">工作学习部门：</strong></td>
+		<td><input type="text" class="member_input01" name="depart" value="{$list.depart}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><strong class="color_333">现任职务：</strong></td>
+		<td><input type="text" class="member_input01" name="job" value="{$list.job}"/></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><span class="color_red">*</span> <strong class="color_333">技术职称：</strong></td>
+		<td><select name="job_title_id" id="job_title" class="member_select01">
+			<option value="0">-- 请选择 --</option>
+			{foreach from=$position_list item=li}
+			<option value="{$li.id}" {if $list.job_title_id eq $li.id}selected{/if}>{$li.name}</option>
+			{/foreach}
+		</select></td>
+	</tr>
+	<tr>
+		<td height="42" align="right"><strong class="color_333">现从事专业：</strong></td>
+		<td><input type="text" class="member_input01" name="career" value="{$list.career}"/></td>
+	</tr>
+	<tr>
+		<td height="82" align="right"><strong class="color_333">主要技术专长：</strong></td>
+		<td><textarea class="member_input03" name="speciality">{$list.speciality}</textarea></td>
+	</tr>
+	<tr>
+		<td height="42" align="right">&nbsp;</td>
+		<td>  {if $list.file_url neq ''}<a href="../{$list.file_url}" class="member_a03">已上传登记表模板下载</a>{/if}</td>
+	</tr>
+	<tr class="hidden">
+		<td height="42" align="right">&nbsp;</td>
+		<td class="color_999"><input style="display:none" type="file" name="file_url" id="file_url" onchange="$('#now_file').html($('#file_url').val());"/><span id="now_file"></span><br><a href="#" onclick="$('#file_url').click();" class="member_but04">会员登记表上传</a>可更新填写再次上传</td>
+	</tr>
+	<tr class="hidden">
+		<td height="52" align="right">&nbsp;</td>
+		<td valign="bottom"><a href="#" class="member_but02" onclick="check_form();">提 交</a><a href="#" class="member_but03" onclick="$('#mamber_message_form')[0].reset();">重 置</a></td>
+	</tr>
+						</table>
+						
+						</form>
+					
+
+</body>
+</html>
+<script>
+
+$("#month option[value='"+$("#now_month").val()+"']").attr("selected","selected");
+
+
+</script>

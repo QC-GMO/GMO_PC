@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="2" class="title_b bg_bai">网 站 栏 目 管 理</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="85%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}">栏目管理首页</a> |
+    <a href="{$CurrentPageName}?action=add">添加栏目</a> |
+    <a href="{$CurrentPageName}?action=order">一级栏目排序</a> |
+    <a href="{$CurrentPageName}?action=order_other">多级栏目排序</a> |</td>
+  </tr>
+</table>
+{if $smarty.get.action eq 'add'}
+<form action="?action=insert" method="post" enctype="multipart/form-data">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">添 加 栏 目</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_over b">上级栏目：</td>
+	<td width="85%" class="border tr_out p_l_5">
+    <select name="class_parent_id" class="en">
+    <option value="0">无(作为一级分类)</option>
+    {foreach from=$menu_array item="zw" name="zw"}
+    <option value="{$zw.class_id}"{if $zw.class_id eq $smarty.get.class_id} selected{/if}>{$zw.class_icon}{$zw.class_name}</option>
+    {/foreach}
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name" type="text" size="50" maxlength="100" id="class_name"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目地址：</td>
+    <td class="border tr_out p_l_5"><input name="class_url" type="text" size="50" maxlength="100" id="class_url"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目显示：</td>
+	<td class="border tr_out p_l_5">
+    <input name="is_show" type="radio" class="input_check" value="1" checked/>是
+    <input name="is_show" type="radio" class="input_check" value="0"/>否</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目权限：</td>
+	<td class="border tr_out p_l_5">
+    <select name="menu_flag">
+	<option value="0">超级管理员</option>
+	<option value="1">高级管理员</option>
+	<option value="2">普通管理员</option>
+    <option value="3" selected>一般管理员</option>
+	</select></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/></td>
+  </tr>
+</table>
+</form>
+{elseif $smarty.get.action eq 'edit'}
+<form action="?action=update&class_id={$rows.class_id}" method="post" enctype="multipart/form-data">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">修 改 栏 目</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_over b">上级栏目：</td>
+	<td width="85%" class="border tr_out p_l_5">
+    <select name="class_parent_id" class="en">
+    <option value="0">无(作为一级分类)</option>
+    {foreach from=$menu_array item="zw" name="zw"}
+    <option value="{$zw.class_id}"{if $zw.class_id eq $rows.class_parent_id} selected{/if}>{$zw.class_icon}{$zw.class_name}</option>
+    {/foreach}
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目名称：</td>
+    <td class="border tr_out p_l_5"><input name="class_name" type="text" size="50" maxlength="100" id="class_name" value="{$rows.class_name}"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目地址：</td>
+    <td class="border tr_out p_l_5"><input name="class_url" type="text" id="class_url" value="{$rows.class_url}" size="50" maxlength="100"/></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目显示：</td>
+	<td class="border tr_out p_l_5">
+    <input name="is_show" type="radio" class="input_check" value="1"{if $rows.is_show=='1'} checked{/if}/>是
+    <input name="is_show" type="radio" class="input_check" value="0"{if $rows.is_show=='0'} checked{/if}/>否</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_over b">栏目权限：</td>
+	<td class="border tr_out p_l_5"><select name="menu_flag">
+	<option value="0"{if $rows.menu_flag=='0'} selected{/if}>超级管理员</option>
+	<option value="1"{if $rows.menu_flag=='1'} selected{/if}>高级管理员</option>
+	<option value="2"{if $rows.menu_flag=='2'} selected{/if}>普通管理员</option>
+    <option value="3"{if $rows.menu_flag=='3'} selected{/if}>一般管理员</option>
+	</select></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center" class="tr_out">
+      <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+      <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+      <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/></td>
+  </tr>
+</table>
+</form>
+{elseif $smarty.get.action eq 'order'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="4">一 级 栏 目 排 序</td>
+  </tr>
+  {foreach from=$menu_array item="menu" name="menu"}
+  <tr class="tr_out tr_check">
+    <td width="50%" align="left" class="border b">
+    <img src='images/tree_folder4.gif' valign='abvmiddle'/>
+    {$menu.class_name}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $smarty.foreach.menu.iteration ne 1}<img src='images/order_up.gif' border='0' title='向上移动'/> <a href='?action=up_order&class_id={$menu.class_id}'>向上移动</a>{else}&nbsp;{/if}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $smarty.foreach.menu.iteration ne $menu.class_count}<a href='?action=down_order&class_id={$menu.class_id}'>向下移动</a> <img src='images/order_down.gif' border='0' title='向下移动'/>{else}&nbsp;{/if}
+    
+    </td>
+  </tr>
+    {foreachelse}
+  <tr class="tr_out"><td colspan="3" align="center" class="border">暂无栏目分类信息！</td></tr>
+    {/foreach}
+</table>
+{elseif $smarty.get.action eq 'order_other'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="4">多 级 栏 目 排 序</td>
+  </tr>
+  {foreach from=$menu_array item="menu" name="menu"}
+  <tr class="tr_out tr_check">
+    <td width="50%" align="left" class="border">
+    {$menu.class_line}<img src='images/tree_folder{if $menu.class_child>0}4{else}3{/if}.gif'/>
+    {if $menu.class_depth==0}<b>{/if}
+    {$menu.class_name}
+    {if $menu.class_depth==0}</b>{/if}
+    {if $menu.class_child>0}[{$menu.class_child}]{/if}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $menu.class_parent_id>0}
+    	{if $menu.class_up>0}
+    		<img src="images/order_up.gif" border="0" title="向上移动"/>
+   			<a href="?action=up_order_other&class_id={$menu.class_id}">向上移动</a>
+    	{else}
+    		&nbsp;
+    	{/if}
+    {else}
+    	&nbsp;
+    {/if}
+    </td>
+	<td width="25%" align="center" class="border">
+    {if $menu.class_parent_id>0}
+    	{if $menu.class_down>0}
+    		<img src="images/order_down.gif" border="0" title="向下移动"/>
+   			<a href="?action=down_order_other&class_id={$menu.class_id}">向下移动</a>
+    	{else}
+    		&nbsp;
+    	{/if}
+    {else}
+    	&nbsp;
+    {/if}
+    </td>
+  </tr>
+    {foreachelse}
+  <tr class="tr_out"><td colspan="3" align="center" class="border">暂无栏目分类信息！</td></tr>
+    {/foreach}
+</table>
+{else}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td width="35%" class="title_b bg_bai b">栏目名称</td>
+    <td width="30%" class="title_b bg_bai b">栏目地址</td>
+    <td width="10%" class="title_b bg_bai b">状态</td>
+    <td width="15%" class="title_b bg_bai b">栏目权限</td>
+    <td width="10%" class="title_b bg_bai b">操作</td>
+  </tr>
+	{foreach from=$menu_array item="menu"}
+  <tr class="tr_out tr_check">
+    <td align="left" valign="middle" class="border">
+    {$menu.class_line}<img src='images/tree_folder{if $menu.class_child>0}4{else}3{/if}.gif'/>
+    {if $menu.class_depth==0}<b>{/if}
+    <a href="?action=edit&class_id={$menu.class_id}">{$menu.class_name}</a>
+    {if $menu.class_depth==0}</b>{/if}
+    {if $menu.class_child>0}[{$menu.class_child}]{/if}
+    </td>
+	<td align="left" class="border">&nbsp;{$menu.class_url}</td>
+	<td align="center" class="border">{if $menu.is_show==1}显示{else}<span class="f_CCCCCC">隐藏</span>{/if}</td>
+	<td align="center" class="border">{if $menu.menu_flag==0}<span class="f_9933FF">超级管理员</span>{elseif $menu.menu_flag==1}<span class="f_FF0000">高级管理员</span>{elseif $menu.menu_flag==2}<span class="f_0000FF">普通管理员</span>&nbsp;{elseif $menu.menu_flag==3}<span class="f_F5AE03">一般管理员</span>{else}&nbsp;{/if}</td>
+	<td align="center" class="border">
+    <a href="?action=add&class_id={$menu.class_id}"><img src="images/add.gif" border="0" alt="添加"/></a>
+    <a href="?action=edit&class_id={$menu.class_id}"><img src="images/edit.gif" border="0" alt="编辑"/></a>
+    <a href="?action=delete&class_id={$menu.class_id}" class="del"><img src="images/delete.gif" border="0" alt="删除"/></a></td>
+  </tr>
+    {foreachelse}
+  <tr class="tr_out"><td colspan="5" align="center" class="border">暂无栏目分类信息！</td></tr>
+    {/foreach}
+</table>
+{/if}
+</body>
+</html>

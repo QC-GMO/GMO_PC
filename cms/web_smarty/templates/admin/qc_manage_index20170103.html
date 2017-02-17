@@ -1,0 +1,116 @@
+{if $w3c==1}<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">{/if}
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$web.Web_SiteName} - 网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+</head>
+<body class="{$bg_class}">
+{if $smarty.get.action eq 'indexleft'}
+<table width="165" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center">
+    <span class="cursor_p b" onclick="top.location.href='{$CurrentPageName}';">管理首页</span>　|　<span class="cursor_p b quit">退出管理</span></td>
+  </tr>
+  <tr>
+    <td align="left" class="p_l_30 bg_bai">
+    用户账号：<span class="f_F5AE03">{$Session.Admin.UserName}</span><br/>
+    权限等级：{$flag_class_array[$Session.Admin.Flag]}
+    </td>
+  </tr>
+</table>
+<!-- 菜单导航开始 -->
+{foreach from=$menu_array item="menu" name="menu"}
+<div class="left_menu_title">≡ {$menu.class_name} ≡</div>
+<div class="left_menu_content">
+  <ul>
+	{foreach from=$menu.son item="sons" name="sons"}
+    <li><a href="{$sons.class_url}" title="{$sons.class_name}">{$sons.class_name}</a></li>
+	{/foreach}
+  </ul>
+</div>
+{/foreach}
+<!-- 菜单导航结束 -->
+{elseif $smarty.get.action eq 'indexright'}
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="2" class="title_b bg_bai">系 统 信 息 统 计</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="left" class="border tr_out p_l_5">欢迎使用 <span class="f_FF0000">{$web.Web_SiteName}</span> 后台管理系统，当前使用版本为 PHP/MySql <span class="f_0000FF">{$web.Web_Version}</span></td>
+  </tr>
+  <tr>
+    <td width="50%" align="left" class="border tr_out p_l_5">服务器 I P ：{$SERVER_ADDR}</td>
+    <td width="50%" align="left" class="border tr_out p_l_5">客户端 I P ：{$REMOTE_ADDR}</td>
+  </tr>
+  <tr>
+    <td align="left" class="border tr_out p_l_5">服务器软件：{$SERVER_SOFTWARE}</td>
+    <td align="left" class="border tr_out p_l_5">数据库版本：MySql {$MYSQL_VERSION}</td>
+  </tr>
+  <tr>
+    <td colspan="2" align="left" class="border tr_out p_l_5">浏览器类型：{$HTTP_USER_AGENT}</td>
+  </tr>
+  <tr>
+    <td align="left" class="border tr_out p_l_5 f_FF0000" colspan="2">安全小提示：请注意保密您的登陆密码，密码的定期修改可最大限度的保障您网站数据的安全。</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="2" class="title_b bg_bai">系 统 管 理 帮 助</td>
+  </tr>
+  <tr>
+    <td width="15%" align="center" class="border tr_out p_l_5">系统开发：</td>
+    <td width="85%" align="left" class="border tr_out p_l_5"><a href="http://www.dn.cn" target="_blank"><span class="f_9933FF">中国企业港 (www.dn.cn) 上海求创科技有限公司</span></a></td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_out p_l_5">系统负责：</td>
+    <td align="left" class="border tr_out p_l_5">技术部 <span class="f_FF0000">{$web.Web_SiteName}</span> 项目组</td>
+  </tr>
+  <tr>
+    <td align="center" class="border tr_out p_l_5">联系方式：</td>
+    <td align="left" class="border tr_out p_l_5">
+公司总机：021-52302968 52302969 52302970 52302971<br />
+公司传真：021-52302973<br />
+业务部分机：14 15 16 21 25 26<br />
+业务部邮箱：<a href="mailto:sales@dn.cn">sales@dn.cn</a><br /> 
+免费咨询热线（全国）：400 889 1636<br />
+售后服务电话：021-62820049<br />
+售后服务邮箱：<a href="mailto:service@dn.cn">service@dn.cn</a><br />
+&#187; <a href="http://www.dn.cn/aboutus/lianxiwm.htm" target="_blank">点击查看详细联系方式</a> </td>
+  </tr>
+</table>
+{else}{$web_status}
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="3" height="57">
+      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="td_line">
+        <tr>
+          <td width="280" height="55" align="left"><a href="http://www.dn.cn/" target="_blank" title="中国企业港"><img src="images/top_logo.gif" width="280" height="55" border="0" /></a></td>
+          <td style="background:url(images/top_bg.gif);">&nbsp;</td>
+          <td width="250"><a href="../" target="_blank" title="打开网站首页"><img src="images/top_tb.gif" alt="打开网站首页" width="250" height="55" border="0" /></a></td>
+        </tr>
+        <tr>
+          <td colspan="3" height="2"></td>
+        </tr>
+      </table>    
+    </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top" id="frm_left" name="frm_left" class="left_top"><iframe frameborder="0" id="frmleft" name="frmleft" src="?action=indexleft" class="left_frm" scrolling="yes"></iframe></td>
+    <td align="center" valign="middle" class="bg_frm"><div id="switchPoint"><img src="images/shrink_left.gif" alt="隐藏左侧菜单" /></div></td>
+    <td align="center" valign="top" id="frm_right" name="frm_right" class="right_top bg_frm">
+    <iframe frameborder="0" id="frmright" name="frmright" src="?action=indexright" class="right_frm" scrolling="yes"></iframe>
+    </td>
+  </tr>
+</table>
+{/if}
+</body>
+</html>

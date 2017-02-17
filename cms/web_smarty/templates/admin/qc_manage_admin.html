@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>网站管理系统</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="../js/jquery.alerts.css" rel="stylesheet" type="text/css" />
+<link href="../js/ui/jquery.ui.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/jquery.form.js"></script>
+<script type="text/javascript" src="../js/jquery.alerts.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.js"></script>
+<script type="text/javascript" src="../js/ui/jquery.ui.draggable.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+</head>
+<body class="body_bg_3">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td colspan="2" class="title_b bg_bai">管 理 员 管 理</td>
+  </tr> 
+  <tr>
+    <td width="15%" align="center" class="border tr_out b">快捷方式：</td>
+    <td width="85%" align="left" class="border tr_out"> |
+    <a href="{$CurrentPageName}">管理首页</a> | 
+    <a href="{$CurrentPageName}?action=add">新增管理员</a> |  
+    </td>
+  </tr>
+</table>
+{if $smarty.get.action eq 'add'}
+<form name="myform" action="?action=insert" method="post">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">管 理 员 添 加</td>
+  </tr>
+  <tr> 
+    <td width="15%" align="center" class="border tr_over b">管理帐号：</td>
+    <td width="85%" class="border tr_out p_l_5"><input name="username" type="text" size="30" maxlength="30"/></td>
+  </tr>
+  <tr> 
+    <td align="center" class="border tr_over b">初始密码：</td>
+    <td class="border tr_out p_l_5"><input name="password" type="password" size="30" maxlength="30" onkeyup="CheckIntensity(this.value)"/> 
+    <span class="red">( * 输入的密码位数不能小于5位或大于16位 )</span></td>
+  </tr>
+  <tr> 
+    <td align="center" class="border tr_over b">强度检测：</td>
+    <td class="border tr_out p_l_5">
+    <table border="0" cellpadding="0" cellspacing="0">
+    <tr align="center">
+    <td id="pwd_Weak" class="pwd pwd_c">&nbsp;</td>
+    <td id="pwd_Medium" class="pwd pwd_c pwd_f">无</td>
+    <td id="pwd_Strong" class="pwd pwd_c pwd_c_r">&nbsp;</td>
+    </tr>
+    </table></td>
+  </tr>
+  <tr> 
+    <td align="center" class="border tr_over b">确认密码：</td>
+    <td class="border tr_out p_l_5"><input name="conpassword" type="password" size="30" maxlength="30"/></td>
+  </tr>
+  <tr> 
+    <td rowspan="4" align="center" class="border tr_over b">权限设定：</td>
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="3" class="input_check" checked />普通管理员：需要指定权限</label></td>
+  </tr>
+  <tr>
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="2" class="input_check" />高级管理员：需要指定权限</label></td>
+  </tr> 
+  <tr>
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="1" class="input_check"/>超级管理员：拥有超级权限</label></td>
+  </tr> 
+  {if $Session.Admin.Flag==0}
+  <tr>
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="0" class="input_check"/>超级管理员：拥有超级权限</label></td>
+  </tr>
+  {/if}
+  <tr> 
+    <td colspan="2" align="center" class="border tr_out">
+    <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+    <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+    <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>    </td>
+  </tr>
+</table>
+</form>
+{elseif $smarty.get.action eq 'edit'}
+<form name="myform" action="?action=update&id={$rows.id}&flag={$rows.flag}" method="post">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai" colspan="2">管 理 员 修 改</td>
+  </tr>
+  <tr> 
+    <td width="15%" align="center" class="border tr_over b">管理帐号：</td>
+    <td width="85%" class="border tr_out p_l_5">{$rows.username}</td>
+  </tr>
+  <tr> 
+    <td align="center" class="border tr_over b">旧的密码：</td>
+    <td class="border tr_out p_l_5"><input name="oldpassword" type="password" size="30" maxlength="30"/></td>
+  </tr>
+  <tr> 
+    <td align="center" class="border tr_over b">新的密码：</td>
+    <td class="border tr_out p_l_5"><input name="password" type="password" onkeyup="CheckIntensity(this.value)" size="30" maxlength="30"/> 
+    <span class="red">( * 输入的密码位数不能小于5位或大于16位 )</span></td>
+  </tr>
+  <tr> 
+    <td align="center" class="border tr_over b">强度检测：</td>
+    <td class="border tr_out p_l_5">
+    <table border="0" cellpadding="0" cellspacing="0">
+    <tr align="center">
+    <td id="pwd_Weak" class="pwd pwd_c">&nbsp;</td>
+    <td id="pwd_Medium" class="pwd pwd_c pwd_f">无</td>
+    <td id="pwd_Strong" class="pwd pwd_c pwd_c_r">&nbsp;</td>
+    </tr>
+    </table></td>
+  </tr>
+  <tr> 
+    <td align="center" class="border tr_over b">确认密码：</td>
+    <td class="border tr_out p_l_5"><input name="conpassword" type="password" size="30" maxlength="30"/></td>
+  </tr>
+  <tr>
+    <td rowspan="5" align="center" class="border tr_over b">权限设定：</td>
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="3" class="input_check"{if $rows.flag==3} checked{/if}/>
+      一般管理员：需要指定权限</label></td>
+  </tr>
+  <tr> 
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="2" class="input_check"{if $rows.flag==2} checked{/if}/>
+      普通管理员：需要指定权限</label></td>
+  </tr>
+  <tr>
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="1" class="input_check"{if $rows.flag==1} checked{/if}/>
+    高级管理员：需要指定权限</label></td>
+  </tr>
+  {if $Session.Admin.Flag==0}
+  <tr>
+    <td class="border tr_out p_l_5"><label><input type="radio" name="flag" value="0" class="input_check"{if $rows.flag==0} checked{/if}/>超级管理员：拥有超级权限</label></td>
+  </tr>
+  {/if}
+  <tr> 
+    <td colspan="2" align="center" class="border tr_out">
+    <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+    <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+    <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>    </td>
+  </tr>
+</table>
+</form> 
+{elseif $smarty.get.action eq 'purview_install'}
+<form action="?action=purview_update&id={$rows.id}" method="post" name="myform">
+<table width="100%" border="0" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td class="title_b bg_bai">设置管理员 “{$rows.username}” 的权限</td>
+  </tr>
+{foreach from=$menu_array item="zw" name="zw"}
+  {if $zw.son neq ''}
+  <tr> 
+    <td class="border tr_over">
+    <label><input name="class_id[]" type="checkbox" value="{$zw.class_id}" class="input_check boxs"{if $zw.class_id|in_array:$rows.purview} checked{/if}/><strong>{$zw.class_name}</strong></label> [{$zw.class_count}]</td>
+  </tr>
+  <tr> 
+    <td class="border tr_out p_l_20">
+    {foreach from=$zw.son item="ww" name="ww"}
+    <label><input name="class_id[]" type="checkbox" value="{$ww.class_id}" class="input_check box_{$smarty.foreach.zw.iteration-1}"{if $ww.class_id|in_array:$rows.purview} checked{/if}/>{$ww.class_name}</label>
+    {/foreach}
+    </td>
+  </tr>
+  {/if}
+{/foreach}
+  <tr> 
+    <td align="left" class="bg_bai">
+    <input name="checkboxall" type="checkbox" id="checkboxall" class="input_check"/><label for="checkboxall">选择所有权限</label>
+    </td>
+  </tr>
+  <tr> 
+    <td align="center" class="tr_out">
+    <input name=" 提交 " type="submit" class="lostfocus btn" id=" 提交 " value=" 提交 "/>
+    <input name=" 重置 " type="reset" class="lostfocus btn" id=" 重置 " value=" 重置 "/>
+    <input name=" 取消 " type="button" class="lostfocus btn back" id=" 取消 " value=" 取消 "/>
+    </td>
+  </tr>
+</table>
+</form>
+{else}
+<table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="border">
+  <tr align="center">
+    <td width="5%" class="title_b bg_bai b">ID</td>
+    <td width="15%" class="title_b bg_bai b">管理帐号</td>
+    <td width="15%" class="title_b bg_bai b">权限等级</td>
+    <td width="15%" class="title_b bg_bai b">最后登录IP</td>
+    <td width="18%" class="title_b bg_bai b">最后登录时间</td>
+    <td width="7%" class="title_b bg_bai b">登录数</td>
+    <td width="15%" class="title_b bg_bai b">权限设置</td>
+    <td width="10%" class="title_b bg_bai b">可用操作</td>
+  </tr>
+{foreach from=$manage_array item="list" name="zw"}
+  <tr class="tr_out tr_check">
+    <td align="center" class="border">{$smarty.foreach.zw.iteration}</td>
+    <td align="center" class="border">{$list.username}</td>
+    <td align="center" class="border">{$flag_class_array[$list.flag]}</td>
+    <td align="center" class="border">{$list.login_ip}</td>
+    <td align="center" class="border">{$list.login_time}</td>
+    <td align="center" class="border">{$list.login_num}</td>
+    <td align="center" class="border">
+    {if $list.flag==0}
+    <span class="f_F5AE03" title="拥有所有权限">管理员权限</span> 
+    {elseif $list.flag==1}
+    <span class="f_9933FF" title="拥有超级权限">超级权限</span>
+    {else}  
+	    {if $Session.Admin.UserName == $list.username}无操作
+	    {else}
+	    <a href="?action=purview_install&id={$list.id}"><span class="f_0000FF" title="需要详细指定每一项管理权限">设置权限</span></a>
+	    {/if}
+    {/if}
+    </td>
+    <td align="center" class="border">
+    <a href="?action=edit&id={$list.id}"><img src="images/edit.gif" alt="编辑"/></a>&nbsp;&nbsp;
+    {if $Session.Admin.UserName != $list.username}<a href="?action=delete&id={$list.id}" class="del"><img src="images/delete.gif" alt="删除"/></a>{else}<img src="images/delete_no.gif" alt="当前用户"/>{/if}</td>
+  </tr>
+{foreachelse}
+  <tr class="tr_out"><td height="28" colspan="11" align="center">无数据！</td></tr>
+{/foreach}
+</table>
+{/if}
+</body>
+</html>
