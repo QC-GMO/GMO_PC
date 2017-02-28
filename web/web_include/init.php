@@ -1,5 +1,5 @@
 <?php
-error_reporting(7); //E_ALL & ~E_NOTICE
+error_reporting(0); //E_ALL & ~E_NOTICE
 if(version_compare(PHP_VERSION, '5.3.0', '<')){
 	set_magic_quotes_runtime(0);
 }
@@ -86,23 +86,4 @@ $from_url = urlencode('http://'.$_SERVER['HTTP_HOST'] . request_uri());
 $smarty->assign("from_url",$from_url); 
 $prior=$_SERVER['HTTP_REFERER'];
 $smarty->assign("prior",$prior);
-//错误报告保存在文件中
-//$old_error_handler = set_error_handler("userErrorHandler");
-
-/* set_error_handler('exception_handler');
-function exception_handler($severity, $message, $filepath, $line)
-{
-    if($severity==1 || $severity==2 || $severity==4){
-        print_r(array($severity, $message, $filepath, $line));
-    }
-} */
-//register_shutdown_function('handleFatalPhpError');
-/* function handleFatalPhpError() {
-    $last_error = error_get_last();
-    //if($last_error['type'] === 8) {//E_ERROR
-    if($last_error) {
-        //error_log('asd', 3, "my-errors.log");
-        print_r($last_error);
-    }
-} */
 ?>
